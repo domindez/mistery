@@ -2,14 +2,15 @@ const EventEmitter = require("events");
 
 // Board
 
+let grid = []; 
 let nRows = 9;
 let nCol = 6; 
-let grid = []; 
 
 for (let i=1 ; i < nRows+1 ; i++){
 
   for(let j=1 ; j < nCol+1 ; j++){
     grid.push({
+      
       id : "t" + i.toString() + j.toString(),
       row : i,
       col : j, 
@@ -34,7 +35,12 @@ grid[0].isPlayer = true;
 
 // Set treasure
 
-grid[53].treasue = true;
+const xMarkTheSpot = "t96"
+grid.filter(t => t.id == xMarkTheSpot)[0].treasue = true;
+
+
+
+
 
 // List of death tiles
 
@@ -42,8 +48,8 @@ const deathTiles = grid.filter(t =>
   (t.id == "t25") || 
   (t.id == "t22") ||
   (t.id == "t41") ||
-  (t.id == "t52") ||
-  (t.id == "t61") 
+  (t.id == "t42") ||
+  (t.id == "t65") 
 )
 
 // Set death tiles
@@ -55,43 +61,48 @@ tile.death = true
 
 // Practicando con el objeto movimiento
 
-const movimiento = {
+const objMovimiento = {
   "playerAlive" : true,
-  "whereIsPlayer" : "t52",
-  "tileToGo" : "t53",
+  "whereIsPlayer" : "t62",
+  "tileToGo" : "t65",
 }
 
+// Crear el objeto emisor de eventos
 const movementsEmitter = new EventEmitter();
 
-movementsEmitter.on("playerWantToMove", () => {
+// Lo que pasa cuando se llama el evento
+movementsEmitter.on("playerWantToMove", (movimiento) => {
 
   const playerTile = grid.filter(t => t.id == movimiento.whereIsPlayer)[0];
   const playerDestiny = grid.filter(t => t.id == movimiento.tileToGo)[0]
+  const treasureTile = grid.filter(t => t.treasue == true)[0]
   
-  if(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny) && !playerDestiny.death){
+  // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
+  if(!(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny))){  
     
-    // lógica de moverse
-    console.log("se ha movido")
+    console.log("No llega o no está vivo")
+    return
+  } 
+  else{ // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
+   
+    if(playerDestiny.death){ 
+      // Si la casilla destino es muerte:
+      console.log("Ha entrado en una casilla de muerte");
+  
+    // Si la casilla no es muerte
+    }else{
 
-  }
-  else if(movimiento.playerAlive == true && !playerTile.adjacentCells.includes(playerDestiny)){
-
-    // no llega esto creo que se puede borrar
-    console.log("no llega")
-
-  }
-  else if(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny) && playerDestiny.death){
-    
-    // logica de muerte
-    console.log("se ha muerto")
-
-  }else if(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny) && playerDestiny.treasue){
-
-    // lógica de encontrar el tesoro. No llega porq se mete antes en la de moverse. Igual hay que anidar esta dentro, o mejor anidar una que
-    // sea ganar si estás en una adjacente al tesoro.
-    console.log("Has encontrado el tesoro!")
+      // logica de moverse
+      console.log("Se ha movido");
+      
+      if(treasureTile.adjacentCells.includes(playerDestiny)){
+        // logica de ganar
+        console.log("has ganado")
+      }
+    }
   }
   
 });
 
-movementsEmitter.emit("playerWantToMove");
+
+movementsEmitter.emit("playerWantToMove", objMovimiento);
