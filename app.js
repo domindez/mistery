@@ -1,3 +1,4 @@
+const http = require("http");
 const EventEmitter = require("events");
 
 // Board
@@ -63,12 +64,13 @@ tile.death = true
 
 const objMovimiento = {
   "playerAlive" : true,
-  "whereIsPlayer" : "t62",
+  "whereIsPlayer" : "t24",
   "tileToGo" : "t65",
 }
 
 // Crear el objeto emisor de eventos
 const movementsEmitter = new EventEmitter();
+
 
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (movimiento) => {
@@ -80,8 +82,8 @@ movementsEmitter.on("playerWantToMove", (movimiento) => {
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
   if(!(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny))){  
     
-    console.log("No llega o no está vivo")
-    return
+    console.log("No llega o no está vivo");
+    
   } 
   else{ // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
    
@@ -97,12 +99,24 @@ movementsEmitter.on("playerWantToMove", (movimiento) => {
       
       if(treasureTile.adjacentCells.includes(playerDestiny)){
         // logica de ganar
-        console.log("has ganado")
+        console.log("has ganado");
       }
     }
   }
   
 });
 
+movementsEmitter.emit("playerWantToMove", objMovimiento)
 
-movementsEmitter.emit("playerWantToMove", objMovimiento);
+const servidor = http.createServer((req, res) => {  
+  res.end("Hola mundo");
+})
+
+const port = 3000;
+
+servidor.listen(port, () => {
+  console.log(`El servidor esta escuchando en http://localhost:${port}`);
+})
+
+
+
