@@ -1,0 +1,22 @@
+{
+  "name": "mistery",
+  "version": "1.0.0",
+  "description": "Proyecto Mistery",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domindez/mistery.git"
+  },
+  "author": "domindez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/domindez/mistery/issues"
+  },
+  "homepage": "https://github.com/domindez/mistery#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

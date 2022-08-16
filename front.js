@@ -1,9 +1,9 @@
 
 
 let movimiento = {
-  "playerAlive" : true,
-  "whereIsPlayer" : "t11",
-  "tileToGo" : "t12",
+  "playerAlive": true,
+  "whereIsPlayer": "t11",
+  "tileToGo": "t12",
 }
 
 movimientoJSON = JSON.stringify(movimiento);
@@ -25,6 +25,6 @@ playerAction
   .then((value) => {
     console.log(value);
   })
-  .catch((err) =>{
+  .catch((err) => {
     console.log(err)
   });

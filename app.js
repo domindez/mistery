@@ -1,71 +1,42 @@
+const express = require("express");
 const http = require("http");
 const EventEmitter = require("events");
+const { grid } = require("./game.js");
 
-// Board
 
-let grid = []; 
-let nRows = 9;
-let nCol = 6; 
+const app = express();
 
-for (let i=1 ; i < nRows+1 ; i++){
+app.get("/", (req, res) => {
+  res.send("Esto funciona!");
+})
 
-  for(let j=1 ; j < nCol+1 ; j++){
-    grid.push({
-      
-      id : "t" + i.toString() + j.toString(),
-      row : i,
-      col : j, 
-    });
-  }
-}
 
-// Set adjacent cells
 
-grid.forEach(tile => {
-  tile.adjacentCells = [ 
-    grid.filter(t => t.row === tile.row-1 && t.col == tile.col)[0], 
-    grid.filter(t => t.row === tile.row+1 && t.col == tile.col)[0],
-    grid.filter(t => t.col === tile.col-1 && t.row == tile.row)[0], 
-    grid.filter(t => t.col === tile.col+1 && t.row == tile.row)[0]
-  ]
-});
+app.get("/api/grid", (req, res) => {
+  res.send(grid);
+})
 
-// Set player
 
-grid[0].isPlayer = true;
-
-// Set treasure
-
-const xMarkTheSpot = "t96"
-grid.filter(t => t.id == xMarkTheSpot)[0].treasue = true;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`El servidor está escuchando en el puerto ${PORT}...`);
+})
 
 
 
 
 
-// List of death tiles
 
-const deathTiles = grid.filter(t => 
-  (t.id == "t25") || 
-  (t.id == "t22") ||
-  (t.id == "t41") ||
-  (t.id == "t42") ||
-  (t.id == "t65") 
-)
 
-// Set death tiles
 
-deathTiles.forEach(tile => {
-tile.death = true
-});
 
 
 // Practicando con el objeto movimiento
 
 const objMovimiento = {
-  "playerAlive" : true,
-  "whereIsPlayer" : "t24",
-  "tileToGo" : "t65",
+  "playerAlive": true,
+  "whereIsPlayer": "t24",
+  "tileToGo": "t65",
 }
 
 // Crear el objeto emisor de eventos
@@ -76,49 +47,38 @@ const movementsEmitter = new EventEmitter();
 movementsEmitter.on("playerWantToMove", (movimiento) => {
 
   const playerTile = grid.filter(t => t.id == movimiento.whereIsPlayer)[0];
-  const playerDestiny = grid.filter(t => t.id == movimiento.tileToGo)[0]
-  const treasureTile = grid.filter(t => t.treasue == true)[0]
-  
+  const playerDestiny = grid.filter(t => t.id == movimiento.tileToGo)[0];
+  const treasureTile = grid.filter(t => t.treasue == true)[0];
+
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
-  if(!(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny))){  
-    
+  if (!(movimiento.playerAlive == true && playerTile.adjacentCells.includes(playerDestiny))) {
+
     console.log("No llega o no está vivo");
-    
-  } 
-  else{ // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
-   
-    if(playerDestiny.death){ 
+
+  }
+  else { // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
+
+    if (playerDestiny.death) {
       // Si la casilla destino es muerte:
       console.log("Ha entrado en una casilla de muerte");
-  
-    // Si la casilla no es muerte
-    }else{
+
+      // Si la casilla no es muerte
+    } else {
 
       // logica de moverse
       console.log("Se ha movido");
-      
-      if(treasureTile.adjacentCells.includes(playerDestiny)){
+
+      if (treasureTile.adjacentCells.includes(playerDestiny)) {
         // logica de ganar
         console.log("has ganado");
       }
     }
   }
-  
+
 });
 
-// movementsEmitter.emit("playerWantToMove", objMovimiento)
+movementsEmitter.emit("playerWantToMove", objMovimiento)
 
-const servidor = http.createServer((req, res) => {  
-  console.log(req.url);
-  console.log(req.method);
-  res.end("Hola mundo");
-})
-
-const port = 3000;
-
-servidor.listen(port, () => {
-  console.log(`El servidor esta escuchando en http://localhost:${port}...`);
-})
 
 
 
