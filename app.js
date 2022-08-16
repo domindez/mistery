@@ -106,16 +106,18 @@ movementsEmitter.on("playerWantToMove", (movimiento) => {
   
 });
 
-movementsEmitter.emit("playerWantToMove", objMovimiento)
+// movementsEmitter.emit("playerWantToMove", objMovimiento)
 
 const servidor = http.createServer((req, res) => {  
+  console.log(req.url);
+  console.log(req.method);
   res.end("Hola mundo");
 })
 
 const port = 3000;
 
 servidor.listen(port, () => {
-  console.log(`El servidor esta escuchando en http://localhost:${port}`);
+  console.log(`El servidor esta escuchando en http://localhost:${port}...`);
 })
 
 
