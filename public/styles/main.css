@@ -1,0 +1,47 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-family:monospace;
+    box-sizing: border-box;
+  }
+  
+  body{
+    background-color: #ffe4c4;
+  }
+
+
+  /*  Header  */
+
+  .header-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  h1{
+    font-size: 1.2em;
+    text-align: center;
+  }
+  
+  .img-content{
+    width: 150px;
+    margin: 30px 0px;
+  }
+  
+  img{ max-width: 100%;}
+  
+  
+  @media screen and (min-width:1000px) {
+   
+    h1{
+      font-size: 2em;
+    }
+  
+    .img-content{
+      width: 200px;
+    }
+  }
