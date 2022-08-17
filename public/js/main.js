@@ -1,6 +1,5 @@
 
 
-
 const t11 = document.getElementById("t11");
 const t12 = document.getElementById("t12");
 const t13 = document.getElementById("t13");
@@ -102,38 +101,28 @@ grid[0].isPlayer = true;
 const xMarkTheSpot = "t96"
 grid.filter(t => t.id == xMarkTheSpot)[0].treasue = true;
 
+
+
 board.forEach(element => {
-  // console.log(grid.filter(t => t.id === element.id)[0].id);
+
+  let tileClicked = grid.filter(t => t.id === element.id)[0].id;
+  let jsonTileClickded = JSON.stringify({ tileClicked })
+
   element.addEventListener("click", () => {
-    fetch("url", {
+    fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type" : "application/json"
       },
-      body: JSON.stringify({
-        tileToMove : grid.filter(t => t.id === element.id)[0].id,
-      })
+      body: jsonTileClickded
     })
+    .then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => console.log('Success:', response));
   })
 });
 
 
-
-
-
-
-
-
-
-
-
-let movimiento = {
-  "playerAlive": true,
-  "whereIsPlayer": "t11",
-  "tileToGo": "t12",
-}
-
-movimientoJSON = JSON.stringify(movimiento);
 
 
 // Practicando con promesa
