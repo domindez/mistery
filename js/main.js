@@ -1,5 +1,4 @@
 
-
 const t11 = document.getElementById("t11");
 const t12 = document.getElementById("t12");
 const t13 = document.getElementById("t13");
@@ -65,67 +64,72 @@ const board = [t11, t12, t13, t14, t15, t16,
                t81, t82, t83, t84, t85, t86,
                t91, t92, t93, t94, t95, t96]
 
-let grid = [];
-let nRows = 9;
-let nCol = 6;
+// Player lives
+let livesMsg = document.getElementById("lives-msg");
+livesMsg.innerHTML = "Tienes  vidas";
 
-for (let i = 1; i < nRows + 1; i++) {
 
-  for (let j = 1; j < nCol + 1; j++) {
-    grid.push({
+/* ----------------- Peticiones al backend ----------------- */
 
-      id: "t" + i.toString() + j.toString(),
-      row: i,
-      col: j,
+
+// Al cargar la página
+window.onload = function () {
+
+  fetch("http://localhost:3000/api/onload", {
+    method: "GET",
+  })
+    .then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+      console.log(response);
+      setCurrentStatus(response);
     });
-  }
 }
 
-// Set adjacent cells
+// Botón de Nuevo código
+let jsonNuevoCodigo = JSON.stringify({ nuevoCodigo: true })
 
-grid.forEach(tile => {
-  tile.adjacentCells = [
-    grid.filter(t => t.row === tile.row - 1 && t.col == tile.col)[0] != undefined ? grid.filter(t => t.row === tile.row - 1 && t.col == tile.col)[0].id : null,
-    grid.filter(t => t.row === tile.row + 1 && t.col == tile.col)[0] != undefined ? grid.filter(t => t.row === tile.row + 1 && t.col == tile.col)[0].id : null,
-    grid.filter(t => t.col === tile.col - 1 && t.row == tile.row)[0] != undefined ? grid.filter(t => t.col === tile.col - 1 && t.row == tile.row)[0].id : null,
-    grid.filter(t => t.col === tile.col + 1 && t.row == tile.row)[0] != undefined ? grid.filter(t => t.col === tile.col + 1 && t.row == tile.row)[0].id : null
-  ]
-});
-
-// Set player
-
-grid[0].isPlayer = true;
-
-// Set treasure
-
-const xMarkTheSpot = "t96"
-grid.filter(t => t.id == xMarkTheSpot)[0].treasue = true;
+const newCodeBtn = document.getElementById("new-code-btn");
+newCodeBtn.addEventListener("click", () => {
+  fetch("http://localhost:3000/api/newcode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: jsonNuevoCodigo
+  })
+    .then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+      writeLivesMsg(response);
+    });
+})
 
 // Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
 
-  let tileClicked = grid.filter(t => t.id === element.id)[0].id;
+  let tileClicked = board.filter(t => t.id === element.id)[0].id;
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
     fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
-        "Content-Type" : "application/json"
+        "Content-Type": "application/json"
       },
       body: jsonTileClickded
     })
-    .then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => {
-      console.log('Success:', response)
-      manejarRespuesta(response, tileClicked);
-    });
+      .then(res => res.json())
+      .catch(error => console.error('Error:', error))
+      .then(response => {
+        console.log('Success:', response)
+        manejarRespuesta(response, tileClicked);
+      });
   })
 });
 
 
-// Lógica del juego. Qué hacer con el objeto recivido del fetch
+/* ----------------- Lógica del tablero ----------------- */
 
 // Variables
 let prevTile = "t11";
@@ -135,14 +139,18 @@ playerIcon.classList.add("fa-solid");
 playerIcon.classList.add("fa-person-walking");
 
 const deadPlayer = document.createElement("i");
-deadPlayer.classList.add("fa-solid")
-deadPlayer.classList.add("fa-skull")
+deadPlayer.classList.add("fa-solid");
+deadPlayer.classList.add("fa-skull");
+
+const bottle = document.createElement("i");
+bottle.classList.add("fa-solid");
+bottle.classList.add("fa-wine-bottle");
 
 
 // Reacción del juego al objeto recivido
-function manejarRespuesta(objMovement, tileClicked){
-  if (objMovement.playerMoved){
-    const newPlayerPosID = objMovement.newPos.id;
+function manejarRespuesta(infoMov, tileClicked) {
+  if (infoMov.playerMoved) {
+    const newPlayerPosID = infoMov.newPos.id;
     document.getElementById(prevTile).innerHTML = "";
     document.getElementById(newPlayerPosID).classList.add("green");
     document.getElementById(newPlayerPosID).appendChild(playerIcon);
@@ -150,38 +158,60 @@ function manejarRespuesta(objMovement, tileClicked){
 
     return
   }
-  
-  if (objMovement.enterDeath){
+
+  if (infoMov.enterDeath) {
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
+    setTimeout(function() {playerKilled(infoMov, tileClicked)}, 2000);
+
+    
+
 
   }
 
 }
 
+/* ----------------- Definiciones Funciones ----------------- */
 
+function writeLivesMsg(infoMov) {
+  if (infoMov != 1) livesMsg.innerHTML = `Tienes ${infoMov.lives} vidas`;
+  else livesMsg.innerHTML = `Tienes ${infoMov.lives} vida`
+}
 
+function setTreasure(infoMov){
+  document.getElementById(infoMov.treasure).classList.add("yellow");
+  document.getElementById(infoMov.treasure).appendChild(bottle);
+}
 
+function setPlayer(infoMov){
+  const newPlayerPosID = infoMov.newPos.id;
+  document.getElementById(newPlayerPosID).classList.add("green");
+  document.getElementById(newPlayerPosID).appendChild(playerIcon);
+}
 
+function setTrail(infoMov){
+  infoMov.trail.forEach(element => {
+    board.filter(t => t.id == element.id)[0].classList.add("green");
+  });
+}
 
+function setCurrentStatus(infoMov) {
+  writeLivesMsg(infoMov);
+  setPlayer(infoMov)
+  setTreasure(infoMov);
+  setTrail(infoMov);
 
-// Practicando con promesa
+}
 
-// const succes = true  // <- Esto simula que ha llegado el movimiento bien pero la condicion que determina si se acepta o no dependera d q haya llegado bien el objeto
+function playerKilled(infoMov, tileClicked){
+  setPlayer(infoMov);
+  writeLivesMsg(infoMov);
+  infoMov.trail.forEach(element => {
+    board.filter(t => t.id == element.id)[0].classList.remove("green");    
+  });
+  board.filter(t => t.id == infoMov.newPos.id)[0].classList.add("green");
+  document.getElementById(tileClicked).classList.remove("red");
+  document.getElementById(tileClicked).innerHTML = "";
+}
 
-// const playerAction = new Promise((resolve, reject) => {
-
-//   if (succes) resolve("Todo correcto");
-
-//   if (!succes) reject("Algo ha ido mal...")
-
-// })
-
-// playerAction
-//   .then((value) => {
-//     console.log(value);
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   });

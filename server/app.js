@@ -17,22 +17,30 @@ let tileClicked;
 
 // Routing
 
+// Onload
+app.get("/api/onload", (req, res) => {
+  res.send(infoMov);
+});
+
+// Cuando clicas en un botón del juego
 app.post("/api/clicked", (req, res) => {
-  console.log("me está llegando un post");
+  console.log("peticíon de movimiento recibida");
   tileClicked = req.body
-  movementsEmitter.emit("playerWantToMove", tileClicked, player)
-  res.send(objMovement)
-  objMovement.enterDeath = false;
+  movementsEmitter.emit("playerWantToMove", tileClicked)
+  res.send(infoMov)
+  infoMov.enterDeath = false;
 
 })
 
-
-app.get("/api/clicked", (req, res) => {
-  console.log("me está llegando un get a la url post");
-  res.send(tileClicked)
-  console.log(req.body);
+// Cuando se pulsa el botón de nuevo código
+app.post("/api/newcode", (req, res) => {
+  console.log("petición de nuevo códgio recibida");
+  infoMov.lives++;
+  res.send({lives : infoMov.lives});
+  console.log(`Player tiene ${infoMov.lives} vidas`);
 })
 
+// Prueba
 app.get("/", (req, res) => {
   res.send("Esto funciona!");
   console.log("recibí algo");
@@ -105,31 +113,23 @@ deathTiles.forEach(tile => {
   tile.death = true
 });
 
+// Set posición inicial y botella
 
-// Current Status
-
-let currentStatus = {
-
-}
-
-
-// Set player
-
-let playerPosXY = "t11"
-let posTile = grid.filter(t => t.id == playerPosXY)[0]
-
-let player = {
-  isAlive: true,
-  position: posTile,
-}
+const initialPosXY = "t11";
+let initialPos = grid.filter(t => t.id == initialPosXY)[0];
+const treasue = "t96";
 
 // Objeto para devolver al front
 
-objMovement = {
+infoMov = {
+  lives: 1,
   playerMoved: false,
-  newPos: player.position,
+  newPos: initialPos,
   enterDeath: false,
-  enterWint: false
+  enterWint: false,
+  treasure: treasue,
+  trail: [initialPos],
+  canMove: true
 
 }
 
@@ -137,12 +137,12 @@ objMovement = {
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClicked) => {
 
-  const playerTile = player.position;  //grid.filter(t => t.id == movimiento.whereIsPlayer)[0];
+   
   const playerDestiny = grid.filter(t => t.id == tileClicked.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
 
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
-  if (!(player.isAlive == true && playerTile.adjacentCells.includes(playerDestiny.id))) {
+  if (!(infoMov.lives > 0 && infoMov.newPos.adjacentCells.includes(playerDestiny.id) && infoMov.canMove)) {
     return console.log("No llega o no está vivo");
   }
 
@@ -151,24 +151,29 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
   if (playerDestiny.death) {
     // Si la casilla destino es muerte:
     console.log("Ha entrado en una casilla de muerte");
-    objMovement.playerMoved = false;
-    objMovement.enterDeath = true;
-    player.isAlive = false;
+    infoMov.playerMoved = false;
+    infoMov.enterDeath = true;
+    infoMov.lives --;
+    infoMov.newPos = initialPos;
+    infoMov.canMove = false;
+    setTimeout(() => {infoMov.canMove = true} , 2000)
 
     // Si la casilla no es muerte
   } else {
 
     // logica de moverse
     console.log(`Player se ha movido a ${playerDestiny.id}`);
-    player.position = grid.filter(t => t.id == playerDestiny.id)[0]
-
-    objMovement.playerMoved = true;
-    objMovement.newPos = player.position;
+    infoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
+    infoMov.playerMoved = true;
+    infoMov.trail.push(infoMov.newPos);
+    // infoMov.newPos = player.position;
 
 
     if (treasureTile.adjacentCells.includes(playerDestiny.id)) {
       // logica de ganar
       console.log("has ganado");
+      infoMov.canMove = false;
+
     }
   }
 
