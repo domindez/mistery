@@ -157,7 +157,8 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
     infoMov.newPos = initialPos;
     infoMov.canMove = false;
     setTimeout(() => {infoMov.canMove = true} , 2000)
-
+   
+    
     // Si la casilla no es muerte
   } else {
 
