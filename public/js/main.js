@@ -101,8 +101,7 @@ grid[0].isPlayer = true;
 const xMarkTheSpot = "t96"
 grid.filter(t => t.id == xMarkTheSpot)[0].treasue = true;
 
-
-
+// Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
 
   let tileClicked = grid.filter(t => t.id === element.id)[0].id;
@@ -118,9 +117,51 @@ board.forEach(element => {
     })
     .then(res => res.json())
     .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
+    .then(response => {
+      console.log('Success:', response)
+      manejarRespuesta(response, tileClicked);
+    });
   })
 });
+
+
+// Lógica del juego. Qué hacer con el objeto recivido del fetch
+
+// Variables
+let prevTile = "t11";
+
+const playerIcon = document.createElement("i");
+playerIcon.classList.add("fa-solid");
+playerIcon.classList.add("fa-person-walking");
+
+const deadPlayer = document.createElement("i");
+deadPlayer.classList.add("fa-solid")
+deadPlayer.classList.add("fa-skull")
+
+
+// Reacción del juego al objeto recivido
+function manejarRespuesta(objMovement, tileClicked){
+  if (objMovement.playerMoved){
+    const newPlayerPosID = objMovement.newPos.id;
+    document.getElementById(prevTile).innerHTML = "";
+    document.getElementById(newPlayerPosID).classList.add("green");
+    document.getElementById(newPlayerPosID).appendChild(playerIcon);
+    prevTile = newPlayerPosID;
+
+    return
+  }
+  
+  if (objMovement.enterDeath){
+    document.getElementById(tileClicked).classList.add("red");
+    document.getElementById(tileClicked).appendChild(deadPlayer);
+    document.getElementById(prevTile).innerHTML = "";
+
+  }
+
+}
+
+
+
 
 
 

@@ -8,7 +8,7 @@ const movementsEmitter = new EventEmitter();
 
 
 
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
@@ -21,7 +21,8 @@ app.post("/api/clicked", (req, res) => {
   console.log("me está llegando un post");
   tileClicked = req.body
   movementsEmitter.emit("playerWantToMove", tileClicked, player)
-  res.send(player.position)
+  res.send(objMovement)
+  objMovement.enterDeath = false;
 
 })
 
@@ -93,7 +94,7 @@ treasureTile.treasue = true;
 const deathTiles = grid.filter(t =>
   (t.id == "t12") ||
   (t.id == "t32") ||
-  (t.id == "t41") ||
+  (t.id == "t42") ||
   (t.id == "t42") ||
   (t.id == "t65")
 )
@@ -105,6 +106,11 @@ deathTiles.forEach(tile => {
 });
 
 
+// Current Status
+
+let currentStatus = {
+
+}
 
 
 // Set player
@@ -113,17 +119,17 @@ let playerPosXY = "t11"
 let posTile = grid.filter(t => t.id == playerPosXY)[0]
 
 let player = {
-  isAlive : true,
-  position : posTile,
+  isAlive: true,
+  position: posTile,
 }
 
 // Objeto para devolver al front
 
 objMovement = {
-  playerMoved : false,
-  newPos : player.position,
-  enterDeath : false,
-  enterWint : false
+  playerMoved: false,
+  newPos: player.position,
+  enterDeath: false,
+  enterWint: false
 
 }
 
@@ -131,7 +137,7 @@ objMovement = {
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClicked) => {
 
-  const playerTile =  player.position;  //grid.filter(t => t.id == movimiento.whereIsPlayer)[0];
+  const playerTile = player.position;  //grid.filter(t => t.id == movimiento.whereIsPlayer)[0];
   const playerDestiny = grid.filter(t => t.id == tileClicked.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
 
@@ -139,12 +145,15 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
   if (!(player.isAlive == true && playerTile.adjacentCells.includes(playerDestiny.id))) {
     return console.log("No llega o no está vivo");
   }
-  
+
   // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
 
   if (playerDestiny.death) {
     // Si la casilla destino es muerte:
     console.log("Ha entrado en una casilla de muerte");
+    objMovement.playerMoved = false;
+    objMovement.enterDeath = true;
+    player.isAlive = false;
 
     // Si la casilla no es muerte
   } else {
@@ -152,11 +161,10 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
     // logica de moverse
     console.log(`Player se ha movido a ${playerDestiny.id}`);
     player.position = grid.filter(t => t.id == playerDestiny.id)[0]
-    
-    // Prepara el objMovement
+
     objMovement.playerMoved = true;
-    objMovement.newPos = player.position; 
-    
+    objMovement.newPos = player.position;
+
 
     if (treasureTile.adjacentCells.includes(playerDestiny.id)) {
       // logica de ganar
@@ -167,7 +175,7 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
 
 
 
-}); 
+});
 
 
 
