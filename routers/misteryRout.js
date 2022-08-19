@@ -1,7 +1,9 @@
+
 const express = require("express");
 const routerApi = express.Router();
 const miApp = require("../app");
 
+const { initialPos } = require("../game-board/board");
 
 // Onload
 routerApi.get("/onload", (req, res) => {
@@ -12,7 +14,7 @@ routerApi.get("/onload", (req, res) => {
 routerApi.post("/clicked", (req, res) => {
   miApp.movementsEmitter.emit("playerWantToMove", req.body);
   res.send(miApp.infoMov);
-  if (miApp.infoMov.enterDeath) miApp.infoMov.trail = [miApp.initialPos]
+  if (miApp.infoMov.enterDeath) miApp.infoMov.trail = [initialPos]
   miApp.infoMov.enterDeath = false;
 })
 

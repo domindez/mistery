@@ -24,66 +24,14 @@ app.listen(PORT, () => {
 })
 
 
-/*--                           Juego                           --*/
 
+/* -------------- -------------- -------------- ----  -------------- -------------- -------------- */
+/*                                         Lógica del Juego                                        */
+/* -------------- -------------- -------------- ----  -------------- -------------- -------------- */
 
-// Board
-
-let grid = [];
-let nRows = 9;
-let nCol = 6;
-
-for (let i = 1; i < nRows + 1; i++) {
-
-  for (let j = 1; j < nCol + 1; j++) {
-    grid.push({
-
-      id: "t" + i.toString() + j.toString(),
-      row: i,
-      col: j,
-    });
-  }
-}
-
-// Set adjacent cells
-
-
-grid.forEach(tile => {
-  tile.adjacentCells = [
-    grid.filter(t => t.row === tile.row - 1 && t.col == tile.col)[0] != undefined ? grid.filter(t => t.row === tile.row - 1 && t.col == tile.col)[0].id : null,
-    grid.filter(t => t.row === tile.row + 1 && t.col == tile.col)[0] != undefined ? grid.filter(t => t.row === tile.row + 1 && t.col == tile.col)[0].id : null,
-    grid.filter(t => t.col === tile.col - 1 && t.row == tile.row)[0] != undefined ? grid.filter(t => t.col === tile.col - 1 && t.row == tile.row)[0].id : null,
-    grid.filter(t => t.col === tile.col + 1 && t.row == tile.row)[0] != undefined ? grid.filter(t => t.col === tile.col + 1 && t.row == tile.row)[0].id : null
-  ]
-});
-
-// Set treasure
-
-const xMarkTheSpot = "t96"
-const treasureTile = grid.filter(t => t.id == xMarkTheSpot)[0];
-treasureTile.treasue = true;
-
-// List of death tiles
-
-const deathTiles = grid.filter(t =>
-  (t.id == "t12") ||
-  (t.id == "t32") ||
-  (t.id == "t42") ||
-  (t.id == "t42") ||
-  (t.id == "t65")
-)
-
-// Set death tiles
-
-deathTiles.forEach(tile => {
-  tile.death = true
-});
-
-// Set posición inicial y botella
-
-const initialPosXY = "t11";
-let initialPos = grid.filter(t => t.id == initialPosXY)[0];
-const treasue = "t96";
+// Importar el grid
+const { grid, initialPos, treasure } = require("./game-board/board")
+const { recordingNewPath } = require("./game-board/game-config")
 
 // Objeto para devolver al front
 
@@ -92,16 +40,17 @@ const infoMov = {
   playerMoved: false,
   newPos: initialPos,
   enterDeath: false,
-  treasure: treasue,
+  treasure: treasure,
   trail: [initialPos],
   canMove: true
 }
+
+const newPath = [];
 
 const movementsEmitter = new EventEmitter();
 
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
-
 
   const playerDestiny = grid.filter(t => t.id == tileClickedObj.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
@@ -132,21 +81,24 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
     infoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
     infoMov.playerMoved = true;
     infoMov.trail.push(infoMov.newPos);
-    // infoMov.newPos = player.position;
+    // Si está activado para grabar un nuevo camino:
+    if (recordingNewPath){
+      if(!newPath.includes(infoMov.newPos.id)) newPath.push(infoMov.newPos.id);
+      console.log(newPath);
+    }
 
+    
 
     if (treasureTile.adjacentCells.includes(playerDestiny.id)) {
       // logica de ganar
       console.log("has ganado");
       infoMov.canMove = false;
-
     }
   }
 });
 
 module.exports.infoMov = infoMov;
 module.exports.movementsEmitter = movementsEmitter;
-module.exports.initialPos = initialPos;
 
 
 

@@ -209,3 +209,4 @@ function playerKilled(infoMov, tileClicked) {
   document.getElementById(tileClicked).innerHTML = "";
 }
 
+
