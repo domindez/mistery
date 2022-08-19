@@ -177,7 +177,7 @@ function manejarRespuesta(infoMov, tileClicked) {
 function writeLivesMsg(infoMov) {
   if (infoMov != 1) livesMsg.innerHTML = `Tienes ${infoMov.lives} vidas`;
   else livesMsg.innerHTML = `Tienes ${infoMov.lives} vida`
-}
+} 
 
 function setTreasure(infoMov){
   document.getElementById(infoMov.treasure).classList.add("yellow");
