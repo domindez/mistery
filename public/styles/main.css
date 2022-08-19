@@ -7,7 +7,7 @@
   }
   
   body{
-    background-color: #ffffff3a;
+    background-color: #ffe4c4;
   }
 
 
@@ -23,13 +23,13 @@
   }
   
   h1{
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
   }
   
   .img-content{
     width: 150px;
-    margin: 30px 0px;
+    margin: 30px 0px 10px;
   }
   
   img{ max-width: 100%;}
