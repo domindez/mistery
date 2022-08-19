@@ -55,14 +55,14 @@ const t95 = document.getElementById("t95");
 const t96 = document.getElementById("t96");
 
 const board = [t11, t12, t13, t14, t15, t16,
-               t21, t22, t23, t24, t25, t26,
-               t31, t32, t33, t34, t35, t36,
-               t41, t42, t43, t44, t45, t46,
-               t51, t52, t53, t54, t55, t56,
-               t61, t62, t63, t64, t65, t66,
-               t71, t72, t73, t74, t75, t76,
-               t81, t82, t83, t84, t85, t86,
-               t91, t92, t93, t94, t95, t96]
+  t21, t22, t23, t24, t25, t26,
+  t31, t32, t33, t34, t35, t36,
+  t41, t42, t43, t44, t45, t46,
+  t51, t52, t53, t54, t55, t56,
+  t61, t62, t63, t64, t65, t66,
+  t71, t72, t73, t74, t75, t76,
+  t81, t82, t83, t84, t85, t86,
+  t91, t92, t93, t94, t95, t96]
 
 // Player lives
 let livesMsg = document.getElementById("lives-msg");
@@ -81,7 +81,6 @@ window.onload = function () {
     .then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
-      console.log(response);
       setCurrentStatus(response);
     });
 }
@@ -122,7 +121,6 @@ board.forEach(element => {
       .then(res => res.json())
       .catch(error => console.error('Error:', error))
       .then(response => {
-        console.log('Success:', response)
         manejarRespuesta(response, tileClicked);
       });
   })
@@ -164,7 +162,7 @@ function manejarRespuesta(infoMov, tileClicked) {
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
     writeLivesMsg(infoMov);
-    setTimeout(function() {playerKilled(infoMov, tileClicked)}, 2000);
+    setTimeout(function () { playerKilled(infoMov, tileClicked) }, 2000);
   }
 
 }
@@ -174,20 +172,20 @@ function manejarRespuesta(infoMov, tileClicked) {
 function writeLivesMsg(infoMov) {
   if (infoMov != 1) livesMsg.innerHTML = `Tienes ${infoMov.lives} vidas`;
   else livesMsg.innerHTML = `Tienes ${infoMov.lives} vida`
-} 
+}
 
-function setTreasure(infoMov){
+function setTreasure(infoMov) {
   document.getElementById(infoMov.treasure).classList.add("yellow");
   document.getElementById(infoMov.treasure).appendChild(bottle);
 }
 
-function setPlayer(infoMov){
+function setPlayer(infoMov) {
   const newPlayerPosID = infoMov.newPos.id;
   document.getElementById(newPlayerPosID).classList.add("green");
   document.getElementById(newPlayerPosID).appendChild(playerIcon);
 }
 
-function setTrail(infoMov){
+function setTrail(infoMov) {
   infoMov.trail.forEach(element => {
     board.filter(t => t.id == element.id)[0].classList.add("green");
   });
@@ -201,10 +199,10 @@ function setCurrentStatus(infoMov) {
 
 }
 
-function playerKilled(infoMov, tileClicked){
+function playerKilled(infoMov, tileClicked) {
   setPlayer(infoMov);
   infoMov.trail.forEach(element => {
-    board.filter(t => t.id == element.id)[0].classList.remove("green");    
+    board.filter(t => t.id == element.id)[0].classList.remove("green");
   });
   board.filter(t => t.id == infoMov.newPos.id)[0].classList.add("green");
   document.getElementById(tileClicked).classList.remove("red");

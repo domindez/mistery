@@ -11,35 +11,10 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static("public"))
 
+// Router
 
-let tileClicked;
-
-// Routing
-
-// Onload
-app.get("/api/onload", (req, res) => {
-  res.send(infoMov);
-});
-
-// Cuando clicas en un botón del juego
-app.post("/api/clicked", (req, res) => {
-  console.log("peticíon de movimiento recibida");
-  tileClicked = req.body;
-  movementsEmitter.emit("playerWantToMove", tileClicked);
-  res.send(infoMov);
-  if (infoMov.enterDeath) infoMov.trail=[initialPos]
-  infoMov.enterDeath = false;
-
-})
-
-// Cuando se pulsa el botón de nuevo código
-app.post("/api/newcode", (req, res) => {
-  console.log("petición de nuevo códgio recibida");
-  infoMov.lives++;
-  res.send({lives : infoMov.lives});
-  console.log(`Player tiene ${infoMov.lives} vidas`);
-})
-
+const rutasApi = require("./routers/misteryRout");
+app.use("/api", rutasApi);
 
 // Poniendo el servidor a andar
 
@@ -47,10 +22,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`El servidor está escuchando en el puerto ${PORT}...`);
 })
-
-
-
-
 
 
 /*--                           Juego                           --*/
@@ -116,30 +87,28 @@ const treasue = "t96";
 
 // Objeto para devolver al front
 
-infoMov = {
+const infoMov = {
   lives: 1,
   playerMoved: false,
   newPos: initialPos,
   enterDeath: false,
-  enterWint: false,
   treasure: treasue,
   trail: [initialPos],
   canMove: true
-
 }
 
 const movementsEmitter = new EventEmitter();
 
 // Lo que pasa cuando se llama el evento
-movementsEmitter.on("playerWantToMove", (tileClicked) => {
+movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
 
-   
-  const playerDestiny = grid.filter(t => t.id == tileClicked.tileClicked)[0];
+
+  const playerDestiny = grid.filter(t => t.id == tileClickedObj.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
 
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
   if (!(infoMov.lives > 0 && infoMov.newPos.adjacentCells.includes(playerDestiny.id) && infoMov.canMove)) {
-    return console.log("No llega o no está vivo");
+    return console.log("No se puede ir");
   }
 
   // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
@@ -149,12 +118,12 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
     console.log("Ha entrado en una casilla de muerte");
     infoMov.playerMoved = false;
     infoMov.enterDeath = true;
-    infoMov.lives --;
+    infoMov.lives--;
     infoMov.newPos = initialPos;
     infoMov.canMove = false;
-    setTimeout(() => {infoMov.canMove = true} , 2000)
-   
-    
+    setTimeout(() => { infoMov.canMove = true }, 2000)
+
+
     // Si la casilla no es muerte
   } else {
 
@@ -173,19 +142,11 @@ movementsEmitter.on("playerWantToMove", (tileClicked) => {
 
     }
   }
-
-
-
-
 });
 
-
-
-
-
-
-
-
+module.exports.infoMov = infoMov;
+module.exports.movementsEmitter = movementsEmitter;
+module.exports.initialPos = initialPos;
 
 
 
