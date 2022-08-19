@@ -1,4 +1,4 @@
-const { startPos, treasurePos, Path } = require("./game-config")
+const { startPos, treasurePos, Path } = require("../game-config")
 
 // Board
 

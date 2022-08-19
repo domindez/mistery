@@ -25,13 +25,13 @@ app.listen(PORT, () => {
 
 
 
-/* -------------- -------------- -------------- ----  -------------- -------------- -------------- */
-/*                                         Lógica del Juego                                        */
-/* -------------- -------------- -------------- ----  -------------- -------------- -------------- */
+/* -------------- -------------- ----  -------------- -------------- */
+/*                          Lógica del Juego                         */
+/* -------------- -------------- ----  -------------- -------------- */
 
 // Importar el grid
 const { grid, initialPos, treasure } = require("./game-board/board")
-const { recordingNewPath } = require("./game-board/game-config")
+const { recordingNewPath } = require("./game-config")
 
 // Objeto para devolver al front
 
@@ -57,13 +57,13 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
 
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
   if (!(infoMov.lives > 0 && infoMov.newPos.adjacentCells.includes(playerDestiny.id) && infoMov.canMove)) {
-    return console.log("No se puede ir");
+    console.log("No se puede ir");
+    return;
   }
 
   // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
 
   if (playerDestiny.death) {
-    // Si la casilla destino es muerte:
     console.log("Ha entrado en una casilla de muerte");
     infoMov.playerMoved = false;
     infoMov.enterDeath = true;
@@ -71,11 +71,12 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
     infoMov.newPos = initialPos;
     infoMov.canMove = false;
     setTimeout(() => { infoMov.canMove = true }, 2000)
+    return;
+  } 
+  
 
 
-    // Si la casilla no es muerte
-  } else {
-
+  else{
     // logica de moverse
     console.log(`Player se ha movido a ${playerDestiny.id}`);
     infoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
@@ -86,14 +87,14 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
       if(!newPath.includes(infoMov.newPos.id)) newPath.push(infoMov.newPos.id);
       console.log(newPath);
     }
-
-    
-
-    if (treasureTile.adjacentCells.includes(playerDestiny.id)) {
+    if (playerDestiny == treasureTile){
       // logica de ganar
       console.log("has ganado");
       infoMov.canMove = false;
+      return;
     }
+
+  
   }
 });
 

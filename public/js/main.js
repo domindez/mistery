@@ -82,6 +82,9 @@ window.onload = function () {
     .catch(error => console.error('Error:', error))
     .then(response => {
       setCurrentStatus(response);
+      prevTile = response.newPos.id
+      console.log(prevTile);
+      console.log(response.newPos.id);
     });
 }
 
@@ -130,11 +133,12 @@ board.forEach(element => {
 /* ----------------- Lógica del tablero ----------------- */
 
 // Variables
-let prevTile = "t11";
+
 
 const playerIcon = document.createElement("i");
 playerIcon.classList.add("fa-solid");
 playerIcon.classList.add("fa-person-walking");
+
 
 const deadPlayer = document.createElement("i");
 deadPlayer.classList.add("fa-solid");
@@ -143,15 +147,16 @@ deadPlayer.classList.add("fa-skull");
 const bottle = document.createElement("i");
 bottle.classList.add("fa-solid");
 bottle.classList.add("fa-wine-bottle");
+bottle.classList.add("fa-flip-horizontal");
 
 
 // Reacción del juego al objeto recivido
 function manejarRespuesta(infoMov, tileClicked) {
   if (infoMov.playerMoved) {
     const newPlayerPosID = infoMov.newPos.id;
-    document.getElementById(prevTile).innerHTML = "";
+    if(prevTile != infoMov.treasure ) document.getElementById(prevTile).innerHTML = "";
     document.getElementById(newPlayerPosID).classList.add("green");
-    document.getElementById(newPlayerPosID).appendChild(playerIcon);
+    document.getElementById(newPlayerPosID).insertAdjacentElement('afterbegin', playerIcon);
     prevTile = newPlayerPosID;
 
     return
