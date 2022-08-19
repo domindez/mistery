@@ -112,7 +112,7 @@ board.forEach(element => {
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
-    fetch("http://localhost:3000/api/clicked", {
+    fetch("/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
