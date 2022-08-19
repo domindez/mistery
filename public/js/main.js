@@ -75,7 +75,7 @@ livesMsg.innerHTML = "Tienes  vidas";
 // Al cargar la página
 window.onload = function () {
 
-  fetch("http://localhost:3000/api/onload", {
+  fetch("/api/onload", {
     method: "GET",
   })
     .then(res => res.json())
@@ -90,7 +90,7 @@ let jsonNuevoCodigo = JSON.stringify({ nuevoCodigo: true })
 
 const newCodeBtn = document.getElementById("new-code-btn");
 newCodeBtn.addEventListener("click", () => {
-  fetch("http://localhost:3000/api/newcode", {
+  fetch("/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -111,7 +111,7 @@ board.forEach(element => {
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
-    fetch("http://localhost:3000/api/clicked", {
+    fetch("/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
