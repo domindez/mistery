@@ -11,6 +11,7 @@ const movementsEmitter = new EventEmitter();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
+app.use(express.static("public"))
 
 
 let tileClicked;
@@ -25,9 +26,10 @@ app.get("/api/onload", (req, res) => {
 // Cuando clicas en un botón del juego
 app.post("/api/clicked", (req, res) => {
   console.log("peticíon de movimiento recibida");
-  tileClicked = req.body
-  movementsEmitter.emit("playerWantToMove", tileClicked)
-  res.send(infoMov)
+  tileClicked = req.body;
+  movementsEmitter.emit("playerWantToMove", tileClicked);
+  res.send(infoMov);
+  if (infoMov.enterDeath) infoMov.trail=[initialPos]
   infoMov.enterDeath = false;
 
 })
@@ -40,11 +42,6 @@ app.post("/api/newcode", (req, res) => {
   console.log(`Player tiene ${infoMov.lives} vidas`);
 })
 
-// Prueba
-app.get("/", (req, res) => {
-  res.send("Esto funciona!");
-  console.log("recibí algo");
-})
 
 // Poniendo el server a escuchar 
 
