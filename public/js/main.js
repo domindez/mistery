@@ -75,7 +75,7 @@ livesMsg.innerHTML = "Tienes  vidas";
 // Al cargar la página
 window.onload = function () {
 
-  fetch("/api/onload", {
+  fetch("http://localhost:3000/api/onload", {
     method: "GET",
   })
     .then(res => res.json())
@@ -91,7 +91,7 @@ let jsonNuevoCodigo = JSON.stringify({ nuevoCodigo: true })
 
 const newCodeBtn = document.getElementById("new-code-btn");
 newCodeBtn.addEventListener("click", () => {
-  fetch("/api/newcode", {
+  fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -112,7 +112,7 @@ board.forEach(element => {
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
-    fetch("/api/clicked", {
+    fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -163,11 +163,8 @@ function manejarRespuesta(infoMov, tileClicked) {
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
+    writeLivesMsg(infoMov);
     setTimeout(function() {playerKilled(infoMov, tileClicked)}, 2000);
-
-    
-
-
   }
 
 }
@@ -206,7 +203,6 @@ function setCurrentStatus(infoMov) {
 
 function playerKilled(infoMov, tileClicked){
   setPlayer(infoMov);
-  writeLivesMsg(infoMov);
   infoMov.trail.forEach(element => {
     board.filter(t => t.id == element.id)[0].classList.remove("green");    
   });

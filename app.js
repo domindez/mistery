@@ -2,12 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const EventEmitter = require("events");
 
+// Inicialización
 const app = express();
 
-const movementsEmitter = new EventEmitter();
-
-
-
+// Middlewares
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
@@ -43,7 +41,7 @@ app.post("/api/newcode", (req, res) => {
 })
 
 
-// Poniendo el server a escuchar 
+// Poniendo el servidor a andar
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -130,6 +128,7 @@ infoMov = {
 
 }
 
+const movementsEmitter = new EventEmitter();
 
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClicked) => {
