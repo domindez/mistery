@@ -60,7 +60,7 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
-    background-image: url("/public/img/orange-btn.png");
+    background-image: url("/public/img/orange-btn.png");  
     background-repeat: no-repeat;
     background-position: center;
     width: 180px;
