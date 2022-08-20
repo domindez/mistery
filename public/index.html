@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/game.css">
-  <link rel="stylesheet" href="./styles/popup.css">
+  <link rel="stylesheet" href="./styles/popups.css">
   <script defer src="./js/main.js"></script>
   <link rel="icon" type="image/x-icon" href="./img/skull-island.png">
   <script src="https://kit.fontawesome.com/bf98699826.js" crossorigin="anonymous"></script> 
@@ -30,6 +30,16 @@
     <div class="lives-container">
         <h3 id="lives-msg"></h3>
         <button id="help" class="fa-solid fa-circle-question"></button>
+    </div>
+
+    <div class="overlay" id="code-overlay">
+      <div class="code-box">
+        <form class="code-form">
+          <label>Introduce un nuevo código:</label>
+          <input class="input-text" type="text" name="code" id="code-input">
+          <input class="popup-btn send-code-btn" type="submit">
+        </form>
+      </div>
     </div>
 
     <div class="game-container">
@@ -93,7 +103,7 @@
 
     <!-- <button class="reset-button" id="reset-button">Reset</button> -->
 
-    <div class="overlay active" id="popup-overlay">
+    <div class="overlay " id="popup-overlay">
       <div class="popup">
         <img class="bottle" src="./img/botella-juego-para-bares.png" />
         <p>Un tesoro se oculta en estas costas malditas... La botella de Grog, un licor que se convertirá
