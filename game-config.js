@@ -12,7 +12,7 @@
     /------------------------------------------------------*/
 
 
-const startPos = "t93";
+const startPos = "t33";
 const treasurePos ="t96";
 
 
