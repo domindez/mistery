@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/game.css">
+  <link rel="stylesheet" href="./styles/popup.css">
   <script defer src="./js/main.js"></script>
   <link rel="icon" type="image/x-icon" href="./img/skull-island.png">
   <script src="https://kit.fontawesome.com/bf98699826.js" crossorigin="anonymous"></script> 
@@ -16,11 +17,11 @@
 <body>
 
   <div class="header-container">
-    <div class="img-content">
+    <div>
       <img src="./img/trivi-island-logo.png" alt="logo Trivi Island" />
     </div>
 
-    <h1>El misterio de Drunky Island</h1>
+    <h1>El misterio de Isla Premier</h1>
   </div>
 
   <div class="game">
@@ -28,7 +29,7 @@
     <button class="new-code-btn" id="new-code-btn">Nuevo código</button>
     <div class="lives-container">
         <h3 id="lives-msg"></h3>
-        <i class="fa-solid fa-circle-question"></i>
+        <button id="help" class="fa-solid fa-circle-question"></button>
     </div>
 
     <div class="game-container">
@@ -90,7 +91,24 @@
       </div>
     </div>
 
-    <button class="reset-button" id="reset-button">Reset</button>
+    <!-- <button class="reset-button" id="reset-button">Reset</button> -->
+
+    <div class="overlay active" id="popup-overlay">
+      <div class="popup">
+        <img class="bottle" src="./img/botella-juego-para-bares.png" />
+        <p>Un tesoro se oculta en estas costas malditas... La botella de Grog, un licor que se convertirá
+          en el que desees. Encuentrala en mi mundo y aparecerá en el tuyo.
+        </p>
+        <img class="beer" src="./img/esqueleto-juego-para-bares.png" />
+        <p>Comparte tu bebida con los malditos y gana un pasaje para la isla.
+        </p>
+
+        <button class="popup-btn" id="popUp-btn">Jugar</button>
+       
+ 
+        </p>
+      </div>
+    </div>
 
   </div>
 

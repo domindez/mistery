@@ -24,11 +24,11 @@ button {
     background-position: center;
     width: 180px;
     height: 50px;
-    margin: 10px;
+    margin: 15px;
     filter: brightness(125%);
     color: rgb(16, 60, 35);
     font-weight: 700;
-    
+    font-size: 1.3em;
 }
 
 .new-code-btn:hover{
@@ -40,7 +40,7 @@ button {
 .new-code-btn:active{
     filter: brightness(130%);
     background-size: contain;
-    font-size: 0.96em;
+    font-size: 1.26em;
     
 }
 
@@ -80,13 +80,23 @@ button {
     
 }
 
-.lives-container i{
-    color: rgb(106, 165, 147);
+.lives-container button{
+    background: none;
+    position: relative;
+    border: none;
+    color: #6aa593;
+    
+}
+
+.lives-container button i{
+    color: #6aa593;
+    pointer-events: none;
 }
 
 #lives-msg{
     margin-top: 0;
     color: purple;
+    font-size: 1.3em;
     
 }
 
@@ -119,7 +129,7 @@ button {
 }
 
 .square i{
-    font-size: 1.3em;
+    font-size: 1.8em;
     padding-top: 3px;
     color: rgb(0, 59, 0);
 }

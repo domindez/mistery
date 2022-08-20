@@ -1,3 +1,17 @@
+// Pop Up
+const popup = document.getElementById("popup-overlay");
+const popupBtn = document.getElementById("popUp-btn");
+const help = document.getElementById("help");
+
+popupBtn.addEventListener("click", () => {
+  popup.classList.remove("active");
+})
+
+help.addEventListener("click", () => {
+  popup.classList.add("active");
+})
+
+
 
 const t11 = document.getElementById("t11");
 const t12 = document.getElementById("t12");
@@ -65,7 +79,7 @@ const board = [t11, t12, t13, t14, t15, t16,
   t91, t92, t93, t94, t95, t96]
 
 // Player lives
-let livesMsg = document.getElementById("lives-msg");
+const livesMsg = document.getElementById("lives-msg");
 livesMsg.innerHTML = "Tienes  vidas";
 
 
@@ -84,8 +98,6 @@ window.onload = function () {
     .then(response => {
       setCurrentStatus(response);
       prevTile = response.newPos.id
-      console.log(prevTile);
-      console.log(response.newPos.id);
     });
 }
 
@@ -178,7 +190,7 @@ function manejarRespuesta(infoMov, tileClicked) {
 /* ----------------- Definiciones Funciones ----------------- */
 
 function writeLivesMsg(infoMov) {
-  if (infoMov != 1) livesMsg.innerHTML = `Tienes ${infoMov.lives} vidas`;
+  if (infoMov.lives != 1) livesMsg.innerHTML = `Tienes ${infoMov.lives} vidas`;
   else livesMsg.innerHTML = `Tienes ${infoMov.lives} vida`
 }
 
