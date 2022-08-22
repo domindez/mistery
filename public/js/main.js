@@ -49,64 +49,81 @@ const t13 = document.getElementById("t13");
 const t14 = document.getElementById("t14");
 const t15 = document.getElementById("t15");
 const t16 = document.getElementById("t16");
+const t17 = document.getElementById("t17");
 const t21 = document.getElementById("t21");
 const t22 = document.getElementById("t22");
 const t23 = document.getElementById("t23");
 const t24 = document.getElementById("t24");
 const t25 = document.getElementById("t25");
 const t26 = document.getElementById("t26");
+const t27 = document.getElementById("t27");
 const t31 = document.getElementById("t31");
 const t32 = document.getElementById("t32");
 const t33 = document.getElementById("t33");
 const t34 = document.getElementById("t34");
 const t35 = document.getElementById("t35");
 const t36 = document.getElementById("t36");
+const t37 = document.getElementById("t37");
 const t41 = document.getElementById("t41");
 const t42 = document.getElementById("t42");
 const t43 = document.getElementById("t43");
 const t44 = document.getElementById("t44");
 const t45 = document.getElementById("t45");
 const t46 = document.getElementById("t46");
+const t47 = document.getElementById("t47");
 const t51 = document.getElementById("t51");
 const t52 = document.getElementById("t52");
 const t53 = document.getElementById("t53");
 const t54 = document.getElementById("t54");
 const t55 = document.getElementById("t55");
 const t56 = document.getElementById("t56");
+const t57 = document.getElementById("t57");
 const t61 = document.getElementById("t61");
 const t62 = document.getElementById("t62");
 const t63 = document.getElementById("t63");
 const t64 = document.getElementById("t64");
 const t65 = document.getElementById("t65");
-const t66 = document.getElementById("t66");
+const t67 = document.getElementById("t66");
+const t66 = document.getElementById("t67");
 const t71 = document.getElementById("t71");
 const t72 = document.getElementById("t72");
 const t73 = document.getElementById("t73");
 const t74 = document.getElementById("t74");
 const t75 = document.getElementById("t75");
 const t76 = document.getElementById("t76");
+const t77 = document.getElementById("t77");
 const t81 = document.getElementById("t81");
 const t82 = document.getElementById("t82");
 const t83 = document.getElementById("t83");
 const t84 = document.getElementById("t84");
 const t85 = document.getElementById("t85");
 const t86 = document.getElementById("t86");
+const t87 = document.getElementById("t87");
 const t91 = document.getElementById("t91");
 const t92 = document.getElementById("t92");
 const t93 = document.getElementById("t93");
 const t94 = document.getElementById("t94");
 const t95 = document.getElementById("t95");
 const t96 = document.getElementById("t96");
+const t97 = document.getElementById("t97");
+const t101 = document.getElementById("t101");
+const t102 = document.getElementById("t102");
+const t103 = document.getElementById("t103");
+const t104 = document.getElementById("t104");
+const t105 = document.getElementById("t105");
+const t106 = document.getElementById("t106");
+const t107 = document.getElementById("t107");
 
-const board = [t11, t12, t13, t14, t15, t16,
-  t21, t22, t23, t24, t25, t26,
-  t31, t32, t33, t34, t35, t36,
-  t41, t42, t43, t44, t45, t46,
-  t51, t52, t53, t54, t55, t56,
-  t61, t62, t63, t64, t65, t66,
-  t71, t72, t73, t74, t75, t76,
-  t81, t82, t83, t84, t85, t86,
-  t91, t92, t93, t94, t95, t96]
+const board = [t11, t12, t13, t14, t15, t16, t17,
+  t21, t22, t23, t24, t25, t26, t27,
+  t31, t32, t33, t34, t35, t36, t37,
+  t41, t42, t43, t44, t45, t46, t47,
+  t51, t52, t53, t54, t55, t56, t57,
+  t61, t62, t63, t64, t65, t66, t67,
+  t71, t72, t73, t74, t75, t76, t77,
+  t81, t82, t83, t84, t85, t86, t87,
+  t91, t92, t93, t94, t95, t96, t97,
+  t101, t102, t103, t104, t105, t106, t107]
 
 // Player lives
 const livesMsg = document.getElementById("lives-msg");

@@ -3,8 +3,8 @@ const { startPos, treasurePos, Path } = require("../game-config")
 // Board
 
 let grid = [];
-let nRows = 9;
-let nCol = 6;
+let nRows = 10;
+let nCol = 7;
 
 for (let i = 1; i < nRows + 1; i++) {
 
