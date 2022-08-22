@@ -135,13 +135,13 @@ button {
 }
 
 .square__button{
-    border: solid rgba(0, 0, 0, 0.278) 1px;
+    border: solid rgba(113, 0, 98, 0.237) 1px;
     background-color: #fff4e6;
     height: 39px;
     width: 39px;
     transition: 0.3s;
     cursor: pointer;
-    -webkit-tap-highlight-color: #f1dfc7;
+    -webkit-tap-highlight-color: #ffffff30;
     
 }
 
