@@ -31,7 +31,8 @@ app.listen(PORT, () => {
 
 // Importar el grid
 const { grid, initialPos, treasure } = require("./game-board/board")
-const { recordingNewPath } = require("./game-config")
+const { recordingNewPath, codeToWin } = require("./game-config")
+
 
 // Objeto para devolver al front
 
@@ -42,7 +43,8 @@ const infoMov = {
   enterDeath: false,
   treasure: treasure,
   trail: [initialPos],
-  canMove: true
+  canMove: true,
+  winCode: null
 }
 
 const newPath = [];
@@ -87,10 +89,11 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
       if(!newPath.includes(infoMov.newPos.id)) newPath.push(infoMov.newPos.id);
       console.log(newPath);
     }
+    // logica de ganar
     if (playerDestiny == treasureTile){
-      // logica de ganar
       console.log("has ganado");
       infoMov.canMove = false;
+      infoMov.winCode = codeToWin;
       return;
     }
 

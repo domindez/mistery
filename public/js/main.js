@@ -1,18 +1,46 @@
-// Pop Up
+import CreateShareIconsIsla from "./resources.js";
+
+
+
+// Pop Ups
 const popup = document.getElementById("popup-overlay");
 const popupBtn = document.getElementById("popUp-btn");
 const help = document.getElementById("help");
+const codeWindow = document.getElementById("code-overlay");
+const closePopup = document.getElementById("close-popup");
 
 popupBtn.addEventListener("click", () => {
   popup.classList.remove("active");
+})
+
+closePopup.addEventListener("click", () => {
+  codeWindow.classList.remove("active");
 })
 
 help.addEventListener("click", () => {
   popup.classList.add("active");
 })
 
+
+if (codeWindow){
+  codeWindow.addEventListener("click", e => {
+    console.log(e.target)
+    if (e.target !== codeWindow && e.target !== closePopup) return;
+    codeWindow.classList.remove("active");
+  })
+}
+
+
+CreateShareIconsIsla();
+
 // Code
 const codePopup = document.getElementById("code-overlay");
+const winCode = document.getElementById("win-code");
+const winPopup = document.getElementById("win-pannel-overlay");
+
+
+// PrecTile
+let prevTile;
 
 
 const t11 = document.getElementById("t11");
@@ -88,11 +116,12 @@ livesMsg.innerHTML = "Tienes  vidas";
 /* ----------------- Peticiones al backend ----------------- */
 
 
+
 // Al cargar la página
 window.onload = function () {
 
-  fetch("/api/onload", {
-  // fetch("http://localhost:3000/api/onload", {
+  // fetch("/api/onload", {
+  fetch("http://localhost:3000/api/onload", {
     method: "GET",
   })
     .then(res => res.json())
@@ -100,7 +129,15 @@ window.onload = function () {
     .then(response => {
       setCurrentStatus(response);
       prevTile = response.newPos.id
+
+      if (response.winCode != null){
+        winPopup.classList.add("active");
+        winCode.innerHTML = response.winCode;
+      }
+
     });
+  
+    
 }
 
 // Botón de Nuevo código
@@ -108,8 +145,8 @@ let jsonNuevoCodigo = JSON.stringify({ nuevoCodigo: true })
 
 const newCodeBtn = document.getElementById("new-code-btn");
 newCodeBtn.addEventListener("click", () => {
-  fetch("/api/newcode", {
-  // fetch("http://localhost:3000/api/newcode", {
+  // fetch("/api/newcode", {
+  fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -133,8 +170,8 @@ board.forEach(element => {
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
-    fetch("/api/clicked", {
-    // fetch("http://localhost:3000/api/clicked", {
+    // fetch("/api/clicked", {
+    fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -144,6 +181,7 @@ board.forEach(element => {
       .then(res => res.json())
       .catch(error => console.error('Error:', error))
       .then(response => {
+        console.log(response);
         manejarRespuesta(response, tileClicked);
       });
   })
@@ -178,6 +216,12 @@ function manejarRespuesta(infoMov, tileClicked) {
     document.getElementById(newPlayerPosID).classList.add("green");
     document.getElementById(newPlayerPosID).insertAdjacentElement('afterbegin', playerIcon);
     prevTile = newPlayerPosID;
+    if (infoMov.newPos.id == infoMov.treasure){
+      setTimeout(() => {
+        winPopup.classList.add("active");
+        winCode.innerHTML = infoMov.winCode;
+      } ,1000)
+    }
 
     return
   }

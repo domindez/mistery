@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/game.css">
   <link rel="stylesheet" href="./styles/popups.css">
-  <script defer src="./js/main.js"></script>
+  <script type="module" src="./js/main.js"></script>
   <link rel="icon" type="image/x-icon" href="./img/skull-island.png">
   <script src="https://kit.fontawesome.com/bf98699826.js" crossorigin="anonymous"></script> 
   <title>El misterio de Isla Premier</title>
@@ -34,9 +34,10 @@
 
     <div class="overlay" id="code-overlay">
       <div class="code-box">
+        <i id="close-popup" class="fa-solid fa-square-xmark"></i>
         <form class="code-form">
           <label>Introduce un nuevo código:</label>
-          <input class="input-text" type="text" name="code" id="code-input">
+          <input class="input-text" type="text" name="code" id="code-input" autocomplete="off">
           <input class="popup-btn send-code-btn" type="submit">
         </form>
       </div>
@@ -103,20 +104,35 @@
 
     <!-- <button class="reset-button" id="reset-button">Reset</button> -->
 
-    <div class="overlay " id="popup-overlay">
+    <div class="overlay" id="popup-overlay">
       <div class="popup">
         <img class="bottle" src="./img/botella-juego-para-bares.png" />
-        <p>Un tesoro se oculta en estas costas malditas... La botella de Grog, un licor que se convertirá
-          en el que desees. Encuentrala en mi mundo y aparecerá en el tuyo.
+        <p>Un tesoro se oculta en estas costas malditas... El legendario Grog, encuéntralo y gana una botella.
         </p>
         <img class="beer" src="./img/esqueleto-juego-para-bares.png" />
         <p>Comparte tu bebida con los malditos y gana un pasaje para la isla.
         </p>
 
         <button class="popup-btn" id="popUp-btn">Jugar</button>
-       
- 
-        </p>
+      </div>
+    </div>
+
+    <div class="overlay " id="win-pannel-overlay">
+      <div class="popup">
+        <img class="bottle" src="./img/botella-juego-para-bares.png" />
+        <h3>¡Enhorabuena!</h3>
+        <h4>Has encontrado el Tesoro oculto de Isla Premier</h4>
+        <br>
+        <h4>Dale este código a tu camarero para recibir tu recompensa:</h4>
+        <div class="treasure-code-container">
+          <h3 id="win-code"></h3>
+        </div>
+        <div id="share-button-container"></div>
+        <br>
+        <p>Comparte tu hazaña</p>
+        
+
+
       </div>
     </div>
 
