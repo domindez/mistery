@@ -2,8 +2,11 @@
 const express = require("express");
 const routerApi = express.Router();
 const miApp = require("../app");
-
 const { initialPos } = require("../game-board/board");
+const { connectDB } = require("../db.js");
+
+// Conectarse a la base de datos
+connectDB();
 
 // Onload
 routerApi.get("/onload", (req, res) => {
