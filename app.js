@@ -1,15 +1,21 @@
 const express = require("express");
 const cors = require("cors");
 const EventEmitter = require("events");
+// const bodyParser = require("body-parser");
+
+
+
 
 // Inicialización
 const app = express();
 
 // Middlewares
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(cors())
-app.use(express.static("public"))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
+app.use(express.static("public"));
+// app.use(bodyParser.urlencoded({ extended: false}));
+// app.use(bodyParser.json());
 
 // Router
 
