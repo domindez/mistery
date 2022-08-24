@@ -134,6 +134,20 @@
     margin: 0;
 }
 
+.code-msg:not(:empty){
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.code-msg i{
+    font-size: 2em;
+    color: rgb(196, 5, 82);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.37);
+}
+
 
 /* -------------------------- Winn Pannel -------------------------- */
 

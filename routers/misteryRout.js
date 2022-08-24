@@ -32,18 +32,24 @@ routerApi.get("/codelist", async (req, res) => {
   }
 })
 
-// Enviar nuevo código de consumuciónasd
+// Enviar nuevo código de consumución
 routerApi.post("/newcode", async (req, res) => {
   try {
     console.log(req.body);
-    const codeMatch = await Code.findOne(req.body);
+    const codeMatch = await Code.findOneAndDelete(req.body);
     if (codeMatch != null){
       Code.deleteOne(codeMatch);
       miApp.infoMov.lives++;   
-      res.send({ lives: miApp.infoMov.lives });
+      res.send({ 
+        lives: miApp.infoMov.lives,
+        codeValid: true
+       });
       console.log(`Player tiene ${miApp.infoMov.lives} vidas`);
     }else{
-
+      res.send({ 
+        lives: miApp.infoMov.lives,
+        codeValid: false
+       });
       console.log("Código no valido");
     }
 

@@ -9,6 +9,13 @@ const help = document.getElementById("help");
 const codeWindow = document.getElementById("code-overlay");
 const closePopup = document.getElementById("close-popup");
 const newCodeBtn = document.getElementById("new-code-btn");
+const codeForm = document.getElementById("code-form");
+const codeMsgIcon = document.getElementById("code-msg-icon");
+let codeMsg = document.getElementById("code-msg");
+let codeBox = document.getElementById("code-input");
+
+
+
 
 newCodeBtn.addEventListener("click", () => {
   codePopup.classList.add("active");
@@ -31,6 +38,10 @@ if (codeWindow){
   codeWindow.addEventListener("click", e => {
     if (e.target !== codeWindow && e.target !== closePopup) return;
     codeWindow.classList.remove("active");
+    codeMsg.innerHTML = "";
+    codeBox.value = "";
+    codeMsgIcon.classList.remove("fa-solid");
+    codeMsgIcon.classList.remove("fa-heart");
   })
 }
 
@@ -157,6 +168,41 @@ window.onload = function () {
     });
 }
 
+// Nuevo código
+
+
+codeForm.addEventListener("submit", e => {
+
+let code = document.getElementById("code-input").value;
+const JSONcode = JSON.stringify({code});
+
+  fetch("http://localhost:3000/api/newcode", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSONcode
+    })
+      .then(res => res.json())
+      .catch(error => console.error('Error:', error))
+      .then(response => {
+        console.log(response);
+        if (response.codeValid){
+          writeLivesMsg(response);
+          codeMsg.innerHTML = "¡Se ha añadido una vida!"
+          codeMsgIcon.classList.add("fa-solid");
+          codeMsgIcon.classList.add("fa-heart");
+        }else{
+          console.log("No es valido");
+          codeMsg.innerHTML = "Este código no es válido"
+       
+        }
+      });
+
+  e.preventDefault()
+
+})
+
 // Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
 
@@ -176,6 +222,8 @@ board.forEach(element => {
       .catch(error => console.error('Error:', error))
       .then(response => {
         console.log(response);
+        console.log(tileClicked);
+        console.log(jsonTileClickded);
         manejarRespuesta(response, tileClicked);
       });
   })
