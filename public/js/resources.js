@@ -51,6 +51,8 @@ export default function CreateShareIconsIsla(){
     fragmentGame.appendChild(shLink);
   
     shareBtons.appendChild(fragmentGame);
-  }
+}
+
+
 
 

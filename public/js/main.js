@@ -8,6 +8,11 @@ const popupBtn = document.getElementById("popUp-btn");
 const help = document.getElementById("help");
 const codeWindow = document.getElementById("code-overlay");
 const closePopup = document.getElementById("close-popup");
+const newCodeBtn = document.getElementById("new-code-btn");
+
+newCodeBtn.addEventListener("click", () => {
+  codePopup.classList.add("active");
+})
 
 popupBtn.addEventListener("click", () => {
   popup.classList.remove("active");
@@ -24,14 +29,13 @@ help.addEventListener("click", () => {
 
 if (codeWindow){
   codeWindow.addEventListener("click", e => {
-    console.log(e.target)
     if (e.target !== codeWindow && e.target !== closePopup) return;
     codeWindow.classList.remove("active");
   })
 }
 
-
 CreateShareIconsIsla();
+
 
 // Code
 const codePopup = document.getElementById("code-overlay");
@@ -39,7 +43,7 @@ const winCode = document.getElementById("win-code");
 const winPopup = document.getElementById("win-pannel-overlay");
 
 
-// PrecTile
+// PrevTile
 let prevTile;
 
 
@@ -132,8 +136,6 @@ livesMsg.innerHTML = "Tienes  vidas";
 
 /* ----------------- Peticiones al backend ----------------- */
 
-
-
 // Al cargar la página
 window.onload = function () {
 
@@ -153,32 +155,7 @@ window.onload = function () {
       }
 
     });
-  
-    
 }
-
-// Botón de Nuevo código
-let jsonNuevoCodigo = JSON.stringify({ nuevoCodigo: true })
-
-const newCodeBtn = document.getElementById("new-code-btn");
-newCodeBtn.addEventListener("click", () => {
-  // fetch("/api/newcode", {
-  fetch("http://localhost:3000/api/newcode", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: jsonNuevoCodigo
-  })
-    .then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => {
-      writeLivesMsg(response);
-    });
-    
-    codePopup.classList.add("active");
-
-})
 
 // Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
@@ -225,7 +202,7 @@ bottle.classList.add("fa-wine-bottle");
 bottle.classList.add("fa-flip-horizontal");
 
 
-// Reacción del juego al objeto recivido
+// Reacción del juego al objeto recibido
 function manejarRespuesta(infoMov, tileClicked) {
   if (infoMov.playerMoved) {
     const newPlayerPosID = infoMov.newPos.id;

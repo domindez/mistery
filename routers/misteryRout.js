@@ -22,29 +22,37 @@ routerApi.post("/clicked", (req, res) => {
   miApp.infoMov.enterDeath = false;
 })
 
-// Cuando se pulsa el botón de nuevo código
-routerApi.post("/newcode", (req, res) => {
-  miApp.infoMov.lives++;
-  res.send({ lives: miApp.infoMov.lives });
-  console.log(`Player tiene ${miApp.infoMov.lives} vidas`);
-})
-
 // Coger códigos de MongoDB
 routerApi.get("/codelist", async (req, res) => {
   try {
-      const arrayCodes = await Code.find();
-      console.log(arrayCodes);
+    const arrayCodes = await Code.find();
+    console.log(arrayCodes);
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 })
 
-// Enviar nuevo código de consumución
+// Enviar nuevo código de consumuciónasd
 routerApi.post("/newcode", async (req, res) => {
   try {
+    console.log(req.body);
+    const codeMatch = await Code.findOne(req.body);
+    if (codeMatch != null){
+      Code.deleteOne(codeMatch);
+      miApp.infoMov.lives++;   
+      res.send({ lives: miApp.infoMov.lives });
+      console.log(`Player tiene ${miApp.infoMov.lives} vidas`);
+    }else{
+
+      console.log("Código no valido");
+    }
+
     
+
+    
+
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 })
 

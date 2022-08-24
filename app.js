@@ -1,7 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const EventEmitter = require("events");
+const rutasApi = require("./routers/misteryRout");
 // const bodyParser = require("body-parser");
+
+// Importar el grid
+const { grid, initialPos, treasure } = require("./game-board/board")
+const { recordingNewPath, codeToWin } = require("./game-config")
 
 
 
@@ -14,16 +19,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
+app.use("/api", rutasApi);
+
+
 // app.use(bodyParser.urlencoded({ extended: false}));
 // app.use(bodyParser.json());
 
 // Router
 
-const rutasApi = require("./routers/misteryRout");
-app.use("/api", rutasApi);
 
 // Poniendo el servidor a andar
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`El servidor está escuchando en el puerto ${PORT}...`);
@@ -35,9 +40,6 @@ app.listen(PORT, () => {
 /*                          Lógica del Juego                         */
 /* -------------- -------------- ----  -------------- -------------- */
 
-// Importar el grid
-const { grid, initialPos, treasure } = require("./game-board/board")
-const { recordingNewPath, codeToWin } = require("./game-config")
 
 
 // Objeto para devolver al front

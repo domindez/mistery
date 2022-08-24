@@ -35,10 +35,10 @@
     <div class="overlay" id="code-overlay">
       <div class="code-box">
         <i id="close-popup" class="fa-solid fa-square-xmark"></i>
-        <form class="code-form" action="/api/newcode" method="POST">
+        <form class="code-form" action="http://localhost:3000/api/newcode" method="post" id="code-form">
           <label>Introduce un nuevo código:</label>
-          <input class="input-text" type="text" name="code" id="code-input" autocomplete="off">
-          <input class="popup-btn send-code-btn" type="submit">
+          <input class="input-text" type="text" required name="code" id="code-input" autocomplete="off">
+          <input class="popup-btn send-code-btn" type="submit" id="submit-code">
         </form>
       </div>
     </div>
