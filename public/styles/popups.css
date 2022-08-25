@@ -9,13 +9,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    visibility: hidden;
+    display: none;
    
 }
 
-.active{
-    visibility: visible;
-}
+
 
 .popup{
     display: flex;
@@ -27,11 +25,17 @@
     font-weight: 500;
     text-align: center;
     margin: 20px;
-    padding: 40px 25px 80px;
+    padding: 40px 25px 30px;
     background-image: url("../img/guide-bacground.png");
     background-repeat: no-repeat;
+    background-position: center;
     background-size: contain;
     width: 350px;
+    height: 650px;
+    
+    
+    
+   
 
 }
 
@@ -159,6 +163,37 @@
 
 }
 
+.winner-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.input-name{
+    width: 170px;
+    height: 25px;
+    background-color: antiquewhite;
+    margin-top: 5px;
+    border: solid 1px rgb(176, 137, 63);
+   
+}
+
+.submit-name{
+
+    width: 25px;
+    height: 25px;
+    background-color: rgb(109, 215, 33);
+    border: solid 0px rgb(0, 0, 0);
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+    box-shadow: 2px 2px #0f4403;
+}
+
+.submit-name:active{
+
+    box-shadow: 1px 1px #0f4403;
+}
 
 
 .share-button-container{
@@ -178,7 +213,6 @@
 
 .share-button-container a{
     margin: 0px 12px;
-    transition: 500ms;
     cursor: pointer;
 }
 
@@ -208,4 +242,12 @@
 
 .share-button-container .fa-telegram{
     color: #0088cc;
+}
+
+.active{
+    display: flex;
+}
+
+.hidden{
+    display: none;
 }

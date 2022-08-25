@@ -5,6 +5,8 @@ const miApp = require("../app");
 const { initialPos } = require("../game-board/board");
 const { connectDB } = require("../db")
 const Code = require("../models/code.js")
+const Winner = require("../models/winner.js");
+const { findOne, findOneAndUpdate } = require("../models/code.js");
 
 // Conectar a la base de datos
 connectDB();
@@ -35,7 +37,6 @@ routerApi.get("/codelist", async (req, res) => {
 // Enviar nuevo código de consumución
 routerApi.post("/newcode", async (req, res) => {
   try {
-    console.log(req.body);
     const codeMatch = await Code.findOneAndDelete(req.body);
     if (codeMatch != null){
       Code.deleteOne(codeMatch);
@@ -51,15 +52,29 @@ routerApi.post("/newcode", async (req, res) => {
         codeValid: false
        });
       console.log("Código no valido");
-    }
-
-    
-
-    
-
+    }   
   } catch (error) {
     console.error(error);
   }
+})
+
+// Enviar nuevo ganador
+routerApi.post("/newwinner", async (req, res) => {
+  try {
+    const body = req.body;
+    body.botellas = 1;
+   const matchNombre = await Winner.findOne({nombre: body.nombre});
+   if (matchNombre != null){
+     await Winner.findOneAndUpdate({nombre: body.nombre}, {botellas: matchNombre.botellas+1})
+   }else{
+     Winner.create(body);
+   }
+   miApp.infoMov.winnerNameSent = true
+   res.send(miApp.infoMov);
+  
+ } catch (error) {
+  console.log(error);
+ }
 })
 
 

@@ -2,8 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const EventEmitter = require("events");
 const rutasApi = require("./routers/misteryRout");
-// const bodyParser = require("body-parser");
-
 // Importar el grid
 const { grid, initialPos, treasure } = require("./game-board/board")
 const { recordingNewPath, codeToWin } = require("./game-config")
@@ -52,7 +50,8 @@ const infoMov = {
   treasure: treasure,
   trail: [initialPos],
   canMove: true,
-  winCode: null
+  winCode: null,
+  winnerNameSent: false
 }
 
 const newPath = [];

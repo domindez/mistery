@@ -120,7 +120,9 @@
       </div>
     </div>
 
-    <!-- <button class="reset-button" id="reset-button">Reset</button> -->
+    <button id="victory-btn" class="victory-button">Ver código</button>
+
+    <!-- Panel de ayuda -->
 
     <div class="overlay" id="popup-overlay">
       <div class="popup">
@@ -135,7 +137,9 @@
       </div>
     </div>
 
-    <div class="overlay " id="win-pannel-overlay">
+    <!-- Panel de victoria -->
+
+    <div class="overlay" id="win-pannel-overlay">
       <div class="popup">
         <img class="bottle" src="./img/botella-juego-para-bares.png" />
         <h3>¡Enhorabuena!</h3>
@@ -143,16 +147,31 @@
         <br>
         <h4>Dale este código a tu camarero para recibir tu recompensa:</h4>
         <div class="treasure-code-container">
-          <h3 id="win-code"></h3>
+          <h3 id="win-code">ASD</h3>
         </div>
-        <div id="share-button-container"></div>
         <br>
-        <p>Comparte tu hazaña</p>
-        
-
+        <form class="winner-form" id="winner-form">
+          <label for="winner-name">Dejad vuestro nombre entre los buscadores</label>
+          <div>
+            <input class="input-name" placeholder="Nombre de tu grupo" name="nombre" required id="winner-name" autocomplete="off" type="text">
+            <button class="fa-solid fa-check submit-name" type="submit"></button>
+          </div>
+        </form>
+        <h4 id="name-noted" class="hidden">Tu nombre se ha incluido entre los buscadores</h4>
+        <div id="share-button-container"></div>
 
       </div>
     </div>
+
+        <!-- Panel de victoria -->
+
+        <div class="overlay" id="winner-table">
+          <div class="popup">
+            
+    
+          </div>
+        </div>
+    
 
   </div>
 
