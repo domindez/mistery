@@ -51,7 +51,8 @@ const infoMov = {
   trail: [initialPos],
   canMove: true,
   winCode: null,
-  winnerNameSent: false
+  winnerNameSent: false,
+  isWin: false
 }
 
 const newPath = [];
@@ -101,6 +102,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
       console.log("has ganado");
       infoMov.canMove = false;
       infoMov.winCode = codeToWin;
+      infoMov.isWin = true;
       return;
     }
 

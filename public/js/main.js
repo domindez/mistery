@@ -21,6 +21,11 @@ const winPopup = document.getElementById("win-pannel-overlay");
 const victoryBtn = document.getElementById("victory-btn");
 const winnerForm = document.getElementById("winner-form");
 const nameNoted = document.getElementById("name-noted");
+// Winner Table
+const winnerTable = document.getElementById("winner-table");
+const closewinnerTable = document.getElementById("close-winner");
+const tableBtn = document.getElementById("table-btn");
+
 
 // Add events
 victoryBtn.addEventListener("click", () => winPopup.classList.add("active"));
@@ -28,6 +33,7 @@ newCodeBtn.addEventListener("click", () => codePopup.classList.add("active"));
 popupBtn.addEventListener("click", () => popup.classList.remove("active"));
 closePopup.addEventListener("click", () => codeWindow.classList.remove("active"));
 help.addEventListener("click", () => popup.classList.add("active"));
+
 
 // Close Popups
 if (codeWindow) {
@@ -38,6 +44,13 @@ if (codeWindow) {
     codeBox.value = "";
     codeMsgIcon.classList.remove("fa-solid");
     codeMsgIcon.classList.remove("fa-heart");
+  })
+}
+
+if (winnerTable){
+  winnerTable.addEventListener("click", e => {
+    if (e.target !== winnerTable && e.target !== closewinnerTable) return;
+    winnerTable.classList.remove("active");
   })
 }
 
@@ -145,8 +158,8 @@ livesMsg.innerHTML = "Tienes  vidas";
 // Al cargar la página
 window.onload = function () {
 
-  // fetch("/api/onload", {
-  fetch("http://localhost:3000/api/onload", {
+  fetch("/api/onload", {
+  // fetch("http://localhost:3000/api/onload", {
     method: "GET",
   })
     .then(res => res.json())
@@ -170,8 +183,8 @@ codeForm.addEventListener("submit", e => {
   let code = document.getElementById("code-input").value;
   const JSONcode = JSON.stringify({ code });
 
-  // fetch("/api/newcode", {
-  fetch("http://localhost:3000/api/newcode", {
+  fetch("/api/newcode", {
+  // fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -205,8 +218,8 @@ board.forEach(element => {
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
-    // fetch("/api/clicked", {
-    fetch("http://localhost:3000/api/clicked", {
+    fetch("/api/clicked", {
+    // fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -221,31 +234,54 @@ board.forEach(element => {
   })
 });
 
-// Lista de buscadores
+// Añadir nombre a la lista
 winnerForm.addEventListener("submit", e => {
+  e.preventDefault()
 
   let winnerName = document.getElementById("winner-name").value;
   const JSONcode = JSON.stringify({ nombre: winnerName });
 
-  // fetch("/api/newwinner", {
-  fetch("http://localhost:3000/api/newwinner", {
+  fetch("/api/newwinner", {
+  // fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSONcode
   })
-    .then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => {
-    });
-
-    
-  
-  setNameWinner()
-  e.preventDefault()
-
+  .then(res => res.json())
+  .catch(error => console.error('Error:', error))
+  .then(response => {
+    setNameWinner(response)
+  });
 })
+
+
+  // Abrir y mostrar lista de buscadores
+  tableBtn.addEventListener("click", () => {
+    console.log("object");
+
+    fetch("/api/winnertable", {
+    // fetch("http://localhost:3000/api/winnertable", {
+    method: "GET"
+  })
+  .then(res => res.json())
+  .catch(error => console.error('Error:', error))
+  .then(response => {
+    const winnerList = document.getElementById("winner-table-list");
+    winnerList.innerHTML = ""
+    response.forEach(element => {
+      const newRow = winnerList.insertRow(-1);
+      let col1 = newRow.insertCell(0)
+      let col2 = newRow.insertCell(1)
+
+      col1.innerHTML = element.nombre;
+      col2.innerHTML = element.botellas;
+    });
+  });
+    winnerTable.classList.add("active");
+  });
+
 
 /* ----------------- Lógica del tablero ----------------- */
 
@@ -320,21 +356,13 @@ function setTrail(infoMov) {
   });
 }
 
-function setNameWinner(infoMov) {
-  if (infoMov.winnerNameSent){
-    winnerForm.classList.add("hidden");
-    nameNoted.classList.remove("hidden");
-  }
-}
-
 function setCurrentStatus(infoMov) {
   writeLivesMsg(infoMov);
   setPlayer(infoMov)
   setTreasure(infoMov);
   setTrail(infoMov);
   setNameWinner(infoMov)
-
-
+  
 }
 
 function playerKilled(infoMov, tileClicked) {
@@ -347,4 +375,10 @@ function playerKilled(infoMov, tileClicked) {
   document.getElementById(tileClicked).innerHTML = "";
 }
 
-
+function setNameWinner(infoMov) {
+  if (infoMov.winnerNameSent){
+    winnerForm.classList.add("hidden");
+    nameNoted.classList.remove("hidden");    
+  }
+  if (infoMov.isWin) victoryBtn.classList.add("active");
+}

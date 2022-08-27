@@ -5,6 +5,37 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
+.game-bottom{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 100px;
+}
+
+.table-btn{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    background-color: #83aeb7;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.393);
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.table-btn:active{
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.393);
+}
+
+.table-btn i{
+    font-size: 2em;
+    color: rgb(238, 189, 64);
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.225);
+}
+
 .gamepage-container{
     display: flex;
     flex-direction: column;
@@ -19,7 +50,7 @@ button {
     border: none;
     cursor: pointer;
     background-image: url("../img/code-btn.png");
-    background-size: cover;
+    background-size: 90%;
     background-repeat: no-repeat;
     background-position: center;
     width: 180px;
@@ -28,10 +59,11 @@ button {
     filter: brightness(125%);
     color: rgb(16, 60, 35);
     font-weight: 700;
-    font-size: 1.3em;
+    font-size: 1.4em;
 }
 
 .new-code-btn:hover{
+    background-size: 90%;
     filter: brightness(130%);
     
     
@@ -39,8 +71,9 @@ button {
 
 .new-code-btn:active{
     filter: brightness(130%);
-    background-size: contain;
-    font-size: 1.26em;
+    background-size: 85%;
+    font-size: 1.33em;
+    padding-bottom: 2px;
     
 }
 
@@ -162,7 +195,7 @@ button {
 
 
 .victory-button{
-    visibility: hidden;
+    display: none;
     margin-top: 0px;
     width: 100px;
     height: 30px;

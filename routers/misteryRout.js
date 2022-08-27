@@ -61,21 +61,31 @@ routerApi.post("/newcode", async (req, res) => {
 // Enviar nuevo ganador
 routerApi.post("/newwinner", async (req, res) => {
   try {
-    const body = req.body;
-    body.botellas = 1;
-   const matchNombre = await Winner.findOne({nombre: body.nombre});
+    const winner = req.body;
+    winner.botellas = 1;
+   const matchNombre = await Winner.findOne({nombre: winner.nombre});
    if (matchNombre != null){
-     await Winner.findOneAndUpdate({nombre: body.nombre}, {botellas: matchNombre.botellas+1})
+     await Winner.findOneAndUpdate({nombre: winner.nombre}, {botellas: matchNombre.botellas+1})
    }else{
-     Winner.create(body);
+     Winner.create(winner);
    }
-   miApp.infoMov.winnerNameSent = true
+   miApp.infoMov.winnerNameSent = true;
+   miApp.infoMov.winner = winner;
    res.send(miApp.infoMov);
   
  } catch (error) {
   console.log(error);
  }
 })
+
+// Mostrar tabla
+routerApi.get("/winnertable", async (req, res) => {
+  try {
+    res.send(await Winner.find().sort({botellas: "desc"}));
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 
 

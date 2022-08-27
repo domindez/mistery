@@ -118,9 +118,13 @@
         <button id="t106" class="square__button"></button>
         <button id="t107" class="square__button"></button>
       </div>
+      <div class="game-bottom">
+        <button id="table-btn" class="table-btn"><i class="fa-solid fa-trophy"></i></button>
+        <button id="victory-btn" class="victory-button">Ver código</button>
+      </div>
     </div>
 
-    <button id="victory-btn" class="victory-button">Ver código</button>
+
 
     <!-- Panel de ayuda -->
 
@@ -141,15 +145,15 @@
 
     <div class="overlay" id="win-pannel-overlay">
       <div class="popup">
-        <img class="bottle" src="./img/botella-juego-para-bares.png" />
         <h3>¡Enhorabuena!</h3>
         <h4>Has encontrado el Tesoro oculto de Isla Premier</h4>
-        <br>
+        <hr>
+        <img class="bottle" src="./img/botella-juego-para-bares.png" />
         <h4>Dale este código a tu camarero para recibir tu recompensa:</h4>
         <div class="treasure-code-container">
-          <h3 id="win-code">ASD</h3>
+          <h3 id="win-code"></h3>
         </div>
-        <br>
+        <hr>
         <form class="winner-form" id="winner-form">
           <label for="winner-name">Dejad vuestro nombre entre los buscadores</label>
           <div>
@@ -163,10 +167,23 @@
       </div>
     </div>
 
-        <!-- Panel de victoria -->
+        <!-- Tabla de Buscadores -->
 
         <div class="overlay" id="winner-table">
           <div class="popup">
+            <table>
+              <tr>
+                <th>Buscadores</th>
+                <th>Botellas</th>
+              </tr>
+              <tbody id="winner-table-list">
+                <tr>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <button id="close-winner" class="popup-btn">Cerrar</button>
             
     
           </div>
