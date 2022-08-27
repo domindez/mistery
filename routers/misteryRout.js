@@ -6,14 +6,25 @@ const { initialPos } = require("../game-board/board");
 const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
-const { findOne, findOneAndUpdate } = require("../models/code.js");
+// const { findOne, findOneAndUpdate } = require("../models/code.js");
 
 // Conectar a la base de datos
 connectDB();
 
 // Onload
-routerApi.get("/onload", (req, res) => {
-  res.send(miApp.infoMov);
+routerApi.post("/onload", async(req, res) => {
+  if (req.body.userID == null){
+    const newID = new Date().getTime();
+    const userInfoMov = {...miApp.infoMov}
+    userInfoMov.Id = newID;
+    miApp.allGames.push(userInfoMov);
+    console.log(miApp.allGames);
+    res.send(userInfoMov);
+  }else{
+    const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
+    res.send(currentUserInfoMov);
+  }
+
 });
 
 // Cuando clicas en un botón del juego

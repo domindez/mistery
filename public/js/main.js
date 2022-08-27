@@ -159,16 +159,23 @@ livesMsg.innerHTML = "Tienes  vidas";
 
 // Al cargar la página
 window.onload = function () {
-
-  // fetch("/api/onload", {
-  fetch("http://localhost:3000/api/onload", {
-    method: "GET",
+  let userID = localStorage.getItem("userID");
+  const JsonUserID = JSON.stringify({userID})
+  fetch("/api/onload", {
+  // fetch("http://localhost:3000/api/onload", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JsonUserID
   })
     .then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
       setCurrentStatus(response);
       prevTile = response.newPos.id
+      localStorage.setItem("userID", response.Id)
+      console.log(response);
 
       if (response.winCode != null) {
         winPopup.classList.add("active");
@@ -185,8 +192,8 @@ codeForm.addEventListener("submit", e => {
   let code = document.getElementById("code-input").value;
   const JSONcode = JSON.stringify({ code });
 
-  // fetch("/api/newcode", {
-  fetch("http://localhost:3000/api/newcode", {
+  fetch("/api/newcode", {
+  // fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -220,8 +227,8 @@ board.forEach(element => {
   let jsonTileClickded = JSON.stringify({ tileClicked })
 
   element.addEventListener("click", () => {
-    // fetch("/api/clicked", {
-    fetch("http://localhost:3000/api/clicked", {
+    fetch("/api/clicked", {
+    // fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -232,6 +239,7 @@ board.forEach(element => {
       .catch(error => console.error('Error:', error))
       .then(response => {
         manejarRespuesta(response, tileClicked);
+        console.log(response);
       });
   })
 });
@@ -243,8 +251,8 @@ winnerForm.addEventListener("submit", e => {
   let winnerName = document.getElementById("winner-name").value;
   const JSONcode = JSON.stringify({ nombre: winnerName });
 
-  // fetch("/api/newwinner", {
-  fetch("http://localhost:3000/api/newwinner", {
+  fetch("/api/newwinner", {
+  // fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -263,8 +271,8 @@ winnerForm.addEventListener("submit", e => {
   tableBtn.addEventListener("click", () => {
     console.log("object");
 
-    // fetch("/api/winnertable", {
-    fetch("http://localhost:3000/api/winnertable", {
+    fetch("/api/winnertable", {
+    // fetch("http://localhost:3000/api/winnertable", {
     method: "GET"
   })
   .then(res => res.json())

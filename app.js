@@ -115,6 +115,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
 });
 
 module.exports.infoMov = infoMov;
+module.exports.allGames = allGames;
 module.exports.movementsEmitter = movementsEmitter;
 
 
