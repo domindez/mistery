@@ -18,12 +18,13 @@ button {
     flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
-    background-color: #83aeb7;
+    background-color: #6AA593;
     box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.393);
     border: none;
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
+    color: black;
 }
 
 .table-btn:active{
@@ -58,6 +59,7 @@ button {
     margin: 15px;
     filter: brightness(125%);
     color: rgb(16, 60, 35);
+    
     font-weight: 700;
     font-size: 1.4em;
 }
@@ -100,8 +102,7 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 50px; 
-    
+    margin-bottom: 50px;     
 }
 
 .lives-container{
@@ -142,11 +143,11 @@ button {
 .game-container{
     background-color: transparent;
     background-image: url("../img/game-background.png");
-    padding: 30px 50px 40px;
-    background-size: 102%;
+    padding: 30px 40px 40px;
+    background-size: 108%;
     background-repeat: no-repeat;
-    background-position-x: 0px;
-    background-position-y: -25px;
+    background-position-x: -10px;
+    background-position-y: -24px;
 }
 
 .square{

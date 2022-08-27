@@ -43,6 +43,7 @@ app.listen(PORT, () => {
 // Objeto para devolver al front
 
 const infoMov = {
+  Id: null,
   lives: 1,
   playerMoved: false,
   newPos: initialPos,
@@ -58,6 +59,9 @@ const infoMov = {
 const newPath = [];
 
 const movementsEmitter = new EventEmitter();
+
+// Crear array de todas las sesiones
+const allGames = [ ]
 
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClickedObj) => {

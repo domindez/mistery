@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/game.css">
   <link rel="stylesheet" href="./styles/popups.css">
   <script type="module" src="./js/main.js"></script>
-  <link rel="icon" type="image/x-icon" href="./img/skull-island.png">
+  <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
   <script src="https://kit.fontawesome.com/bf98699826.js" crossorigin="anonymous"></script> 
   <title>El misterio de Isla Premier</title>
 </head>
@@ -21,7 +21,7 @@
       <img src="./img/trivi-island-logo.png" alt="logo Trivi Island" />
     </div>
 
-    <h1>El misterio de Isla Premier</h1>
+    <h1>El misterio de <br> Isla Premier</h1>
   </div>
 
   <div class="game">
@@ -145,30 +145,33 @@
 
     <div class="overlay" id="win-pannel-overlay">
       <div class="popup">
-        <h3>¡Enhorabuena!</h3>
-        <h4>Has encontrado el Tesoro oculto de Isla Premier</h4>
-        <hr>
-        <img class="bottle" src="./img/botella-juego-para-bares.png" />
-        <h4>Dale este código a tu camarero para recibir tu recompensa:</h4>
-        <div class="treasure-code-container">
+        <div class="win-panel-container">
+          <i id="close-win-pannel" class="fa-solid fa-square-xmark close-win-pannel"></i>
+          <h3>¡Enhorabuena!</h3>
+          <h4>Has encontrado la botella</h4>
+          <hr>
+          <img class="bottle" src="./img/botella-juego-para-bares.png" />
+          <h4>Dale este código a tu camarero para recibir tu recompensa:</h4>
+          <div class="treasure-code-container">
           <h3 id="win-code"></h3>
-        </div>
-        <hr>
-        <form class="winner-form" id="winner-form">
-          <label for="winner-name">Dejad vuestro nombre entre los buscadores</label>
-          <div>
-            <input class="input-name" placeholder="Nombre de tu grupo" name="nombre" required id="winner-name" autocomplete="off" type="text">
-            <button class="fa-solid fa-check submit-name" type="submit"></button>
           </div>
-        </form>
-        <h4 id="name-noted" class="hidden">Tu nombre se ha incluido entre los buscadores</h4>
+          <hr>
+          <form class="winner-form" id="winner-form">
+            <label for="winner-name">Dejad vuestro nombre entre los buscadores</label>
+            <div>
+              <input class="input-name" maxlength="19" placeholder=" Nombre de tu grupo" name="nombre" required id="winner-name" autocomplete="off" type="text">
+              <button class="fa-solid fa-check submit-name" type="submit"></button>
+            </div>
+          </form>
+          <h4 id="name-noted" class="hidden">Tu nombre se ha incluido entre los buscadores</h4>
         <div id="share-button-container"></div>
-
+      </div>
+        
       </div>
     </div>
-
-        <!-- Tabla de Buscadores -->
-
+    
+    <!-- Tabla de Buscadores -->
+    
         <div class="overlay" id="winner-table">
           <div class="popup">
             <table>
@@ -183,15 +186,16 @@
                 </tr>
               </tbody>
             </table>
-            <button id="close-winner" class="popup-btn">Cerrar</button>
-            
-    
+            <img class="antorcha" src="./img/antorcha-juego-para-bares.png">
+  
+            <button id="close-winner" class="popup-btn">Cerrar</button>   
           </div>
         </div>
-    
-
   </div>
 
+  <footer>
+    <h5>Un juego de <a target="_blank" href="http://trivify.es">Trivify.es</a></h5>
+  </footer>
 </body>
 
 </html>
