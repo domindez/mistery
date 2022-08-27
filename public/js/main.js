@@ -157,12 +157,13 @@ livesMsg.innerHTML = "Tienes  vidas";
 
 /* ----------------- Peticiones al backend ----------------- */
 
+
 // Al cargar la página
 window.onload = function () {
   let userID = localStorage.getItem("userID");
   const JsonUserID = JSON.stringify({userID})
-  fetch("/api/onload", {
-  // fetch("http://localhost:3000/api/onload", {
+  // fetch("/api/onload", {
+  fetch("http://localhost:3000/api/onload", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -180,7 +181,6 @@ window.onload = function () {
       if (response.winCode != null) {
         winPopup.classList.add("active");
         winCode.innerHTML = response.winCode;
-
       }
 
     });
@@ -192,8 +192,8 @@ codeForm.addEventListener("submit", e => {
   let code = document.getElementById("code-input").value;
   const JSONcode = JSON.stringify({ code });
 
-  fetch("/api/newcode", {
-  // fetch("http://localhost:3000/api/newcode", {
+  // fetch("/api/newcode", {
+  fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -223,12 +223,23 @@ codeForm.addEventListener("submit", e => {
 // Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
 
+  // TODO TO DO mandar la info del clik y de la id por un objeto y adaptar las rutas para que lo coja bien
+  // porq habra que ponerle ahora todo lo que era tilecliked ahora sera tileClickedAndId.tileclicked etc.
+  // Si no va el navegador es porq hay q application borrar localstorage. Buena suerte xD.
+
+  // let tileClickedAndId = {};
+  // tileClickedAndId.tileClicked = board.filter(t => t.id === element.id)[0].id;
+  // tileClickedAndId.id = localStorage.getItem("userID")
+  // let jsonTileClickded = JSON.stringify({ tileClickedAndId })
+
+
   let tileClicked = board.filter(t => t.id === element.id)[0].id;
   let jsonTileClickded = JSON.stringify({ tileClicked })
-
+  
   element.addEventListener("click", () => {
-    fetch("/api/clicked", {
-    // fetch("http://localhost:3000/api/clicked", {
+    // fetch("/api/clicked", {
+    
+    fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -251,8 +262,8 @@ winnerForm.addEventListener("submit", e => {
   let winnerName = document.getElementById("winner-name").value;
   const JSONcode = JSON.stringify({ nombre: winnerName });
 
-  fetch("/api/newwinner", {
-  // fetch("http://localhost:3000/api/newwinner", {
+  // fetch("/api/newwinner", {
+  fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -271,8 +282,8 @@ winnerForm.addEventListener("submit", e => {
   tableBtn.addEventListener("click", () => {
     console.log("object");
 
-    fetch("/api/winnertable", {
-    // fetch("http://localhost:3000/api/winnertable", {
+    // fetch("/api/winnertable", {
+    fetch("http://localhost:3000/api/winnertable", {
     method: "GET"
   })
   .then(res => res.json())

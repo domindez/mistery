@@ -29,6 +29,7 @@ routerApi.post("/onload", async(req, res) => {
 
 // Cuando clicas en un botón del juego
 routerApi.post("/clicked", (req, res) => {
+  console.log(req.body);
   miApp.movementsEmitter.emit("playerWantToMove", req.body);
   res.send(miApp.infoMov);
   if (miApp.infoMov.enterDeath) miApp.infoMov.trail = [initialPos]
