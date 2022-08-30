@@ -22,6 +22,10 @@ const victoryBtn = document.getElementById("victory-btn");
 const winnerForm = document.getElementById("winner-form");
 const nameNoted = document.getElementById("name-noted");
 const closeWinPannel = document.getElementById("close-win-pannel");
+// Any Other Win
+const anyOtherWin = document.getElementById("any-other-win");
+const closeAnyOtherWin = document.getElementById("close-any-other-win");
+
 
 // Winner Table
 const winnerTable = document.getElementById("winner-table");
@@ -35,6 +39,7 @@ newCodeBtn.addEventListener("click", () => codePopup.classList.add("active"));
 popupBtn.addEventListener("click", () => popup.classList.remove("active"));
 closePopup.addEventListener("click", () => codeWindow.classList.remove("active"));
 help.addEventListener("click", () => popup.classList.add("active"));
+closeAnyOtherWin.addEventListener("click", () => anyOtherWin.classList.remove("active"));
 
 
 // Close Popups
@@ -53,6 +58,14 @@ if (winnerTable){
   winnerTable.addEventListener("click", e => {
     if (e.target !== winnerTable && e.target !== closewinnerTable) return;
     winnerTable.classList.remove("active");
+  })
+}
+
+if (anyOtherWin){
+  anyOtherWin.addEventListener("click", e => {
+    console.log(e.target);
+    if (e.target !== anyOtherWin) return;
+    anyOtherWin.classList.remove("active");
   })
 }
 
@@ -162,8 +175,10 @@ livesMsg.innerHTML = "Tienes  vidas";
 window.onload = function () {
   let userID = localStorage.getItem("userID");
   const JsonUserID = JSON.stringify({userID})
-  // fetch("/api/onload", {
-  fetch("http://localhost:3000/api/onload", {
+  console.log('JsonUserID :>> ', JsonUserID);
+
+  fetch("/api/onload", {
+  // fetch("http://localhost:3000/api/onload", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -176,7 +191,7 @@ window.onload = function () {
       setCurrentStatus(response);
       prevTile = response.newPos.id
       localStorage.setItem("userID", response.Id)
-      console.log(response);
+      console.log("Respuesta del onload ->" ,response);
 
       if (response.winCode != null) {
         winPopup.classList.add("active");
@@ -189,11 +204,12 @@ window.onload = function () {
 // Nuevo código
 codeForm.addEventListener("submit", e => {
 
+  let userID = localStorage.getItem("userID");
   let code = document.getElementById("code-input").value;
-  const JSONcode = JSON.stringify({ code });
+  const JSONcode = JSON.stringify({ code, userID });
 
-  // fetch("/api/newcode", {
-  fetch("http://localhost:3000/api/newcode", {
+  fetch("/api/newcode", {
+  // fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -222,35 +238,27 @@ codeForm.addEventListener("submit", e => {
 
 // Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
-
-  // TODO TO DO mandar la info del clik y de la id por un objeto y adaptar las rutas para que lo coja bien
-  // porq habra que ponerle ahora todo lo que era tilecliked ahora sera tileClickedAndId.tileclicked etc.
-  // Si no va el navegador es porq hay q application borrar localstorage. Buena suerte xD.
-
-  // let tileClickedAndId = {};
-  // tileClickedAndId.tileClicked = board.filter(t => t.id === element.id)[0].id;
-  // tileClickedAndId.id = localStorage.getItem("userID")
-  // let jsonTileClickded = JSON.stringify({ tileClickedAndId })
-
-
-  let tileClicked = board.filter(t => t.id === element.id)[0].id;
-  let jsonTileClickded = JSON.stringify({ tileClicked })
   
   element.addEventListener("click", () => {
-    // fetch("/api/clicked", {
     
-    fetch("http://localhost:3000/api/clicked", {
+    let tileClickedAndId = {};
+    tileClickedAndId.tileClicked = board.filter(t => t.id === element.id)[0].id;
+    tileClickedAndId.id = localStorage.getItem("userID");
+    let jsonTileClickedAndId = JSON.stringify( tileClickedAndId )
+    
+    fetch("/api/clicked", {
+    // fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: jsonTileClickded
+      body: jsonTileClickedAndId
     })
       .then(res => res.json())
       .catch(error => console.error('Error:', error))
       .then(response => {
-        manejarRespuesta(response, tileClicked);
-        console.log(response);
+        console.log("La respuesta q llega al front al clickar", response);
+        manejarRespuesta(response, tileClickedAndId.tileClicked);
       });
   })
 });
@@ -259,11 +267,12 @@ board.forEach(element => {
 winnerForm.addEventListener("submit", e => {
   e.preventDefault()
 
+  let userID = localStorage.getItem("userID");
   let winnerName = document.getElementById("winner-name").value;
-  const JSONcode = JSON.stringify({ nombre: winnerName });
+  const JSONcode = JSON.stringify({ nombre: winnerName, userID });
 
-  // fetch("/api/newwinner", {
-  fetch("http://localhost:3000/api/newwinner", {
+  fetch("/api/newwinner", {
+  // fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -282,8 +291,8 @@ winnerForm.addEventListener("submit", e => {
   tableBtn.addEventListener("click", () => {
     console.log("object");
 
-    // fetch("/api/winnertable", {
-    fetch("http://localhost:3000/api/winnertable", {
+    fetch("/api/winnertable", {
+    // fetch("http://localhost:3000/api/winnertable", {
     method: "GET"
   })
   .then(res => res.json())
@@ -326,6 +335,8 @@ bottle.classList.add("fa-flip-horizontal");
 
 // Reacción del juego al objeto recibido
 function manejarRespuesta(infoMov, tileClicked) {
+  showAnyOtherWin(infoMov);
+
   if (infoMov.playerMoved) {
     const newPlayerPosID = infoMov.newPos.id;
     if (prevTile != infoMov.treasure) document.getElementById(prevTile).innerHTML = "";
@@ -382,7 +393,8 @@ function setCurrentStatus(infoMov) {
   setPlayer(infoMov)
   setTreasure(infoMov);
   setTrail(infoMov);
-  setNameWinner(infoMov)
+  setNameWinner(infoMov);
+  showAnyOtherWin(infoMov);
   
 }
 
@@ -402,4 +414,8 @@ function setNameWinner(infoMov) {
     nameNoted.classList.remove("hidden");    
   }
   if (infoMov.isWin) victoryBtn.classList.add("active");
+}
+
+function showAnyOtherWin(infoMov){
+  if (infoMov.anyOtherWin) anyOtherWin.classList.add("active");
 }

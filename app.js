@@ -53,7 +53,8 @@ const infoMov = {
   canMove: true,
   winCode: null,
   winnerNameSent: false,
-  isWin: false
+  isWin: false,
+  anyOtherWin: false
 }
 
 const newPath = [];
@@ -64,13 +65,30 @@ const movementsEmitter = new EventEmitter();
 const allGames = [ ]
 
 // Lo que pasa cuando se llama el evento
-movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
-
-  const playerDestiny = grid.filter(t => t.id == tileClickedObj.tileClicked)[0];
+movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
+  
+  const currentUserInfoMov = allGames.filter(x => x.Id == tileClickedAndId.id)[0];
+  const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
 
+  // Comprobar si alguien ha ganado ya
+  let anyWin;
+  let winnerGame;
+  allGames.forEach(game => { 
+    if (game.isWin) {
+      anyWin = true;
+      winnerGame = game.Id;
+    }
+  });
+
+  if (anyWin && winnerGame != tileClickedAndId.id) {
+    currentUserInfoMov.anyOtherWin = true;
+    currentUserInfoMov.canMove = false;
+  }
+
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
-  if (!(infoMov.lives > 0 && infoMov.newPos.adjacentCells.includes(playerDestiny.id) && infoMov.canMove)) {
+
+  if (!(currentUserInfoMov.lives > 0 && currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) && currentUserInfoMov.canMove)) {
     console.log("No se puede ir");
     return;
   }
@@ -79,12 +97,12 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
 
   if (playerDestiny.death) {
     console.log("Ha entrado en una casilla de muerte");
-    infoMov.playerMoved = false;
-    infoMov.enterDeath = true;
-    infoMov.lives--;
-    infoMov.newPos = initialPos;
-    infoMov.canMove = false;
-    setTimeout(() => { infoMov.canMove = true }, 2000)
+    currentUserInfoMov.playerMoved = false;
+    currentUserInfoMov.enterDeath = true;
+    currentUserInfoMov.lives--;
+    currentUserInfoMov.newPos = initialPos;
+    currentUserInfoMov.canMove = false;
+    setTimeout(() => { currentUserInfoMov.canMove = true }, 2000)
     return;
   } 
   
@@ -93,20 +111,20 @@ movementsEmitter.on("playerWantToMove", (tileClickedObj) => {
   else{
     // logica de moverse
     console.log(`Player se ha movido a ${playerDestiny.id}`);
-    infoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
-    infoMov.playerMoved = true;
-    infoMov.trail.push(infoMov.newPos);
+    currentUserInfoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
+    currentUserInfoMov.playerMoved = true;
+    currentUserInfoMov.trail.push(currentUserInfoMov.newPos);
     // Si está activado para grabar un nuevo camino:
     if (recordingNewPath){
-      if(!newPath.includes(infoMov.newPos.id)) newPath.push(infoMov.newPos.id);
+      if(!newPath.includes(currentUserInfoMov.newPos.id)) newPath.push(currentUserInfoMov.newPos.id);
       console.log(newPath);
     }
     // logica de ganar
     if (playerDestiny == treasureTile){
       console.log("has ganado");
-      infoMov.canMove = false;
-      infoMov.winCode = codeToWin;
-      infoMov.isWin = true;
+      currentUserInfoMov.canMove = false;
+      currentUserInfoMov.winCode = codeToWin;
+      currentUserInfoMov.isWin = true;
       return;
     }
 
