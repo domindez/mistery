@@ -11,9 +11,21 @@ const Winner = require("../models/winner.js");
 // Conectar a la base de datos
 connectDB();
 
+// Anular sesiones anteriores a este time limit.
+let timeLimit;
+
+function setTimeLimit(){
+  timeLimit = new Date().getTime();
+}
+
+setTimeLimit();
+
+
+
+
 // Onload
 routerApi.post("/onload", async(req, res) => {
-  if (req.body.userID == null){
+  if (req.body.userID == null || req.body.userID < timeLimit){
     const newID = new Date().getTime();
     const userInfoMov = JSON.parse(JSON.stringify(miApp.infoMov));
     userInfoMov.Id = newID;
@@ -21,7 +33,6 @@ routerApi.post("/onload", async(req, res) => {
     res.send(userInfoMov);
   }else{
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
-    console.log('currentUserInfoMov :>> ', currentUserInfoMov);
     res.send(currentUserInfoMov);
   }
 
