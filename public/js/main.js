@@ -5,6 +5,7 @@ import CreateShareIconsIsla from "./resources.js";
 // Sonidos
 const winSound = new Audio("win.mp3");
 const newlifeSound = new Audio("newlife.mp3");
+const deadSound = new Audio("dead.mp3");
 
 
 
@@ -386,6 +387,7 @@ function manejarRespuesta(infoMov, tileClicked) {
   }
 
   if (infoMov.enterDeath) {
+    deadSound.play();
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
