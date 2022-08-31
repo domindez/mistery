@@ -3,11 +3,6 @@ import CreateShareIconsIsla from "./resources.js";
 
 
 // Sonidos
-// const deadSound = new Audio();
-// deadSound.src = "../sounds/dead.mp3"
-
-const greenSound = new Audio("green.mp3");
-const deadSound = new Audio("dead.mp3");
 const winSound = new Audio("win.mp3");
 const newlifeSound = new Audio("newlife.mp3");
 
@@ -232,7 +227,6 @@ codeForm.addEventListener("submit", e => {
     .then(response => {
       if (response.codeValid) {
         newlifeSound.currentTime = 0;
-        newlifeSound.volume =0.1
         newlifeSound.play();
         writeLivesMsg(response);
         codeMsg.innerHTML = "¡Se ha añadido una vida!"
@@ -378,12 +372,8 @@ function manejarRespuesta(infoMov, tileClicked) {
     document.getElementById(newPlayerPosID).classList.add("green");
     document.getElementById(newPlayerPosID).insertAdjacentElement('afterbegin', playerIcon);
     prevTile = newPlayerPosID;
-    greenSound.currentTime = 0;
-    greenSound.volume = 0.1;
-    greenSound.play();
     if (infoMov.newPos.id == infoMov.treasure) {
       winSound.currentTime = 0;
-      winSound.volume = 0.1;
       winSound.play();
       setTimeout(() => {
         winPopup.classList.add("active");
@@ -396,9 +386,6 @@ function manejarRespuesta(infoMov, tileClicked) {
   }
 
   if (infoMov.enterDeath) {
-    deadSound.currentTime = 0;
-    deadSound.volume =0.1;
-    deadSound.play();
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
