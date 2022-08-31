@@ -223,6 +223,7 @@ codeForm.addEventListener("submit", e => {
     .catch(error => console.error('Error:', error))
     .then(response => {
       if (response.codeValid) {
+        newlifeSound.currentTime = 0;
         newlifeSound.play();
         writeLivesMsg(response);
         codeMsg.innerHTML = "¡Se ha añadido una vida!"
