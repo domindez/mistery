@@ -65,11 +65,11 @@ const newPath = [];
 const movementsEmitter = new EventEmitter();
 
 // Crear array de todas las sesiones
-const allGames = [ ]
+const allGames = []
 
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
-  
+
 
   const currentUserInfoMov = allGames.filter(x => x.Id == tileClickedAndId.id)[0];
   const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
@@ -80,7 +80,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
   // Comprobar si alguien ha ganado ya
   let anyWin;
   let winnerGame;
-  allGames.forEach(game => { 
+  allGames.forEach(game => {
     if (game.isWin) {
       anyWin = true;
       winnerGame = game.Id;
@@ -111,23 +111,23 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
     currentUserInfoMov.canMove = false;
     setTimeout(() => { currentUserInfoMov.canMove = true }, 2000)
     return;
-  } 
-  
+  }
 
 
-  else{
+
+  else {
     // logica de moverse
     console.log(`Player se ha movido a ${playerDestiny.id}`);
     currentUserInfoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
     currentUserInfoMov.playerMoved = true;
     currentUserInfoMov.trail.push(currentUserInfoMov.newPos);
     // Si está activado para grabar un nuevo camino:
-    if (recordingNewPath){
-      if(!newPath.includes(currentUserInfoMov.newPos.id)) newPath.push(currentUserInfoMov.newPos.id);
+    if (recordingNewPath) {
+      if (!newPath.includes(currentUserInfoMov.newPos.id)) newPath.push(currentUserInfoMov.newPos.id);
       console.log(newPath);
     }
     // logica de ganar
-    if (playerDestiny == treasureTile){
+    if (playerDestiny == treasureTile) {
       console.log("has ganado");
       currentUserInfoMov.canMove = false;
       currentUserInfoMov.winCode = codeToWin;
@@ -135,7 +135,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
       return;
     }
 
-  
+
   }
 });
 

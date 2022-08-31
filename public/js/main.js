@@ -5,10 +5,6 @@ import CreateShareIconsIsla from "./resources.js";
 // Sonidos
 const winSound = new Audio("win.mp3");
 const newlifeSound = new Audio("newlife.mp3");
-const deadSound = new Audio("dead.mp3");
-
-
-
 
 // Pop Ups
 
@@ -64,14 +60,14 @@ if (codeWindow) {
   })
 }
 
-if (winnerTable){
+if (winnerTable) {
   winnerTable.addEventListener("click", e => {
     if (e.target !== winnerTable && e.target !== closewinnerTable) return;
     winnerTable.classList.remove("active");
   })
 }
 
-if (anyOtherWin){
+if (anyOtherWin) {
   anyOtherWin.addEventListener("click", e => {
     if (e.target !== anyOtherWin) return;
     anyOtherWin.classList.remove("active");
@@ -183,10 +179,10 @@ livesMsg.innerHTML = "Tienes  vidas";
 // Al cargar la página
 window.onload = function () {
   let userID = localStorage.getItem("userID");
-  const JsonUserID = JSON.stringify({userID})
+  const JsonUserID = JSON.stringify({ userID })
 
   fetch("/api/onload", {
-  // fetch("http://localhost:3000/api/onload", {
+    // fetch("http://localhost:3000/api/onload", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -216,7 +212,7 @@ codeForm.addEventListener("submit", e => {
   const JSONcode = JSON.stringify({ code, userID });
 
   fetch("/api/newcode", {
-  // fetch("http://localhost:3000/api/newcode", {
+    // fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -245,16 +241,16 @@ codeForm.addEventListener("submit", e => {
 
 // Agregar botón para hacer el fetch a cada cuadrado
 board.forEach(element => {
-  
+
   element.addEventListener("click", () => {
-    
+
     let tileClickedAndId = {};
     tileClickedAndId.tileClicked = board.filter(t => t.id === element.id)[0].id;
     tileClickedAndId.id = localStorage.getItem("userID");
-    let jsonTileClickedAndId = JSON.stringify( tileClickedAndId )
-    
+    let jsonTileClickedAndId = JSON.stringify(tileClickedAndId)
+
     fetch("/api/clicked", {
-    // fetch("http://localhost:3000/api/clicked", {
+      // fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -278,44 +274,44 @@ winnerForm.addEventListener("submit", e => {
   const JSONcode = JSON.stringify({ nombre: winnerName, userID });
 
   fetch("/api/newwinner", {
-  // fetch("http://localhost:3000/api/newwinner", {
+    // fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSONcode
   })
-  .then(res => res.json())
-  .catch(error => console.error('Error:', error))
-  .then(response => {
-    setNameWinner(response)
-  });
+    .then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+      setNameWinner(response)
+    });
 })
 
 
-  // Abrir y mostrar lista de buscadores
-  tableBtn.addEventListener("click", () => {
+// Abrir y mostrar lista de buscadores
+tableBtn.addEventListener("click", () => {
 
-    fetch("/api/winnertable", {
+  fetch("/api/winnertable", {
     // fetch("http://localhost:3000/api/winnertable", {
     method: "GET"
   })
-  .then(res => res.json())
-  .catch(error => console.error('Error:', error))
-  .then(response => {
-    const winnerList = document.getElementById("winner-table-list");
-    winnerList.innerHTML = ""
-    response.forEach(element => {
-      const newRow = winnerList.insertRow(-1);
-      let col1 = newRow.insertCell(0)
-      let col2 = newRow.insertCell(1)
+    .then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+      const winnerList = document.getElementById("winner-table-list");
+      winnerList.innerHTML = ""
+      response.forEach(element => {
+        const newRow = winnerList.insertRow(-1);
+        let col1 = newRow.insertCell(0)
+        let col2 = newRow.insertCell(1)
 
-      col1.innerHTML = element.nombre;
-      col2.innerHTML = element.botellas;
+        col1.innerHTML = element.nombre;
+        col2.innerHTML = element.botellas;
+      });
     });
-  });
-    winnerTable.classList.add("active");
-  });
+  winnerTable.classList.add("active");
+});
 
 
 /* ----------------- Lógica del tablero ----------------- */
@@ -354,17 +350,17 @@ bottle.classList.add("fa-flip-horizontal");
 // Reacción del juego al objeto recibido
 function manejarRespuesta(infoMov, tileClicked) {
   showAnyOtherWin(infoMov);
-  if (infoMov.firstClickValid){
+  if (infoMov.firstClickValid) {
 
     const upTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[0])[0];
     const downTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[1])[0];
     const leftTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[2])[0];
     const rightTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[3])[0];
 
-    if (upTile != null) upTile.innerHTML="";
-    if (downTile != null) downTile.innerHTML="";
-    if (leftTile != null) leftTile.innerHTML="";
-    if (rightTile != null) rightTile.innerHTML="";
+    if (upTile != null) upTile.innerHTML = "";
+    if (downTile != null) downTile.innerHTML = "";
+    if (leftTile != null) leftTile.innerHTML = "";
+    if (rightTile != null) rightTile.innerHTML = "";
   }
 
   if (infoMov.playerMoved) {
@@ -387,7 +383,7 @@ function manejarRespuesta(infoMov, tileClicked) {
   }
 
   if (infoMov.enterDeath) {
-    deadSound.play();
+
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
@@ -413,7 +409,7 @@ function setPlayer(infoMov) {
   const newPlayerPosID = infoMov.newPos.id;
   document.getElementById(newPlayerPosID).classList.add("green");
   document.getElementById(newPlayerPosID).appendChild(playerIcon);
-  
+
 }
 
 function setTrail(infoMov) {
@@ -431,7 +427,7 @@ function setCurrentStatus(infoMov) {
   showAnyOtherWin(infoMov);
   SetArrows(infoMov);
   if (!infoMov.helped) helpPopup.classList.add("active");
-  
+
 }
 
 function playerKilled(infoMov, tileClicked) {
@@ -445,21 +441,21 @@ function playerKilled(infoMov, tileClicked) {
 }
 
 function setNameWinner(infoMov) {
-  if (infoMov.winnerNameSent){
+  if (infoMov.winnerNameSent) {
     winnerForm.classList.add("hidden");
-    nameNoted.classList.remove("hidden");    
+    nameNoted.classList.remove("hidden");
   }
   if (infoMov.isWin) victoryBtn.classList.add("active");
 }
 
-function showAnyOtherWin(infoMov){
+function showAnyOtherWin(infoMov) {
   if (infoMov.anyOtherWin) anyOtherWin.classList.add("active");
 }
 
-function SetArrows(infoMov){
+function SetArrows(infoMov) {
 
-  if (!infoMov.helped){
- 
+  if (!infoMov.helped) {
+
     const adjUp = infoMov.startPos.adjacentCells[0]
     const adjDown = infoMov.startPos.adjacentCells[1]
     const adjLeft = infoMov.startPos.adjacentCells[2]

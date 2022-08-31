@@ -14,7 +14,7 @@ connectDB();
 // Anular sesiones anteriores a este time limit.
 let timeLimit;
 
-function setTimeLimit(){
+function setTimeLimit() {
   timeLimit = new Date().getTime();
 }
 
@@ -24,14 +24,14 @@ setTimeLimit();
 
 
 // Onload
-routerApi.post("/onload", async(req, res) => {
-  if (req.body.userID == null || req.body.userID < timeLimit){
+routerApi.post("/onload", async (req, res) => {
+  if (req.body.userID == null || req.body.userID < timeLimit) {
     const newID = new Date().getTime();
     const userInfoMov = JSON.parse(JSON.stringify(miApp.infoMov));
     userInfoMov.Id = newID;
     miApp.allGames.push(userInfoMov);
     res.send(userInfoMov);
-  }else{
+  } else {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     res.send(currentUserInfoMov);
   }
@@ -53,21 +53,21 @@ routerApi.post("/newcode", async (req, res) => {
   try {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     const codeMatch = await Code.findOneAndDelete(req.body);
-    if (codeMatch != null){
+    if (codeMatch != null) {
       Code.deleteOne(codeMatch);
-      currentUserInfoMov.lives++;   
-      res.send({ 
+      currentUserInfoMov.lives++;
+      res.send({
         lives: currentUserInfoMov.lives,
         codeValid: true
-       });
+      });
       console.log(`Player tiene ${currentUserInfoMov.lives} vidas`);
-    }else{
-      res.send({ 
+    } else {
+      res.send({
         lives: currentUserInfoMov.lives,
         codeValid: false
-       });
+      });
       console.log("Código no valido");
-    }   
+    }
   } catch (error) {
     console.error(error);
   }
@@ -79,25 +79,25 @@ routerApi.post("/newwinner", async (req, res) => {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     const winner = req.body;
     winner.botellas = 1;
-   const matchNombre = await Winner.findOne({nombre: winner.nombre});
-   if (matchNombre != null){
-     await Winner.findOneAndUpdate({nombre: winner.nombre}, {botellas: matchNombre.botellas+1})
-   }else{
-     Winner.create(winner);
-   }
-   currentUserInfoMov.winnerNameSent = true;
-   currentUserInfoMov.winner = winner;
-   res.send(currentUserInfoMov);
-  
- } catch (error) {
-  console.log(error);
- }
+    const matchNombre = await Winner.findOne({ nombre: winner.nombre });
+    if (matchNombre != null) {
+      await Winner.findOneAndUpdate({ nombre: winner.nombre }, { botellas: matchNombre.botellas + 1 })
+    } else {
+      Winner.create(winner);
+    }
+    currentUserInfoMov.winnerNameSent = true;
+    currentUserInfoMov.winner = winner;
+    res.send(currentUserInfoMov);
+
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 // Mostrar tabla
 routerApi.get("/winnertable", async (req, res) => {
   try {
-    res.send(await Winner.find().sort({botellas: "desc"}));
+    res.send(await Winner.find().sort({ botellas: "desc" }));
   } catch (error) {
     console.log(error);
   }
