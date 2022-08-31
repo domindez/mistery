@@ -6,9 +6,6 @@ const rutasApi = require("./routers/misteryRout");
 const { grid, initialPos, treasure } = require("./game-board/board")
 const { recordingNewPath, codeToWin } = require("./game-config")
 
-
-
-
 // Inicialización
 const app = express();
 
@@ -18,13 +15,6 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
 app.use("/api", rutasApi);
-
-
-// app.use(bodyParser.urlencoded({ extended: false}));
-// app.use(bodyParser.json());
-
-// Router
-
 
 // Poniendo el servidor a andar
 const PORT = process.env.PORT || 3000;
