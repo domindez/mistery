@@ -181,7 +181,7 @@ button {
 
 
 .green{
-    background-color: rgb(203, 255, 203);
+    background-color: #cbffcb;
 }
 
 .red{
@@ -190,7 +190,7 @@ button {
 }
 
 .yellow{
-    background-color: rgb(255, 230, 89);
+    background-color: #ffe659;
 }
 
 
@@ -212,8 +212,9 @@ button {
 }
 
 
-.fa-solid{
-    color: black;
+
+.fa-caret-up, .fa-caret-down, .fa-caret-left, .fa-caret-right{
+    color: #9de7b6 !important;
 }
 
 

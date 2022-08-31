@@ -44,8 +44,10 @@ app.listen(PORT, () => {
 
 const infoMov = {
   Id: null,
-  lives: 0,
+  lives: 10,
+  firstClickValid: false,
   playerMoved: false,
+  startPos: initialPos,
   newPos: initialPos,
   enterDeath: false,
   treasure: treasure,
@@ -54,7 +56,8 @@ const infoMov = {
   winCode: null,
   winnerNameSent: false,
   isWin: false,
-  anyOtherWin: false
+  anyOtherWin: false,
+  helped: false
 }
 
 const newPath = [];
@@ -67,9 +70,12 @@ const allGames = [ ]
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
   
+
   const currentUserInfoMov = allGames.filter(x => x.Id == tileClickedAndId.id)[0];
   const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
+
+  currentUserInfoMov.helped = true;
 
   // Comprobar si alguien ha ganado ya
   let anyWin;
@@ -94,6 +100,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
   }
 
   // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
+  currentUserInfoMov.firstClickValid = true;
 
   if (playerDestiny.death) {
     console.log("Ha entrado en una casilla de muerte");

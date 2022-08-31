@@ -48,25 +48,13 @@ routerApi.post("/clicked", (req, res) => {
   currentUserInfoMov.enterDeath = false;
 })
 
-// Coger códigos de MongoDB
-routerApi.get("/codelist", async (req, res) => {
-  try {
-    const arrayCodes = await Code.find();
-    console.log(arrayCodes);
-  } catch (error) {
-    console.log(error);
-  }
-})
-
 // Enviar nuevo código de consumución
 routerApi.post("/newcode", async (req, res) => {
   try {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     const codeMatch = await Code.findOneAndDelete(req.body);
-    console.log("miapp", miApp.allGames.filter(x => x.Id == req.body.userID)[0]);
     if (codeMatch != null){
       Code.deleteOne(codeMatch);
-      console.log("currentUserInfoMov", currentUserInfoMov);
       currentUserInfoMov.lives++;   
       res.send({ 
         lives: currentUserInfoMov.lives,

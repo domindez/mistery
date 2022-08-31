@@ -1,12 +1,26 @@
 import CreateShareIconsIsla from "./resources.js";
 
+
+
+// Sonidos
+// const deadSound = new Audio();
+// deadSound.src = "../sounds/dead.mp3"
+
+const greenSound = new Audio("green.mp3");
+const deadSound = new Audio("dead.mp3");
+const winSound = new Audio("win.mp3");
+const newlifeSound = new Audio("newlife.mp3");
+
+
+
+
 // Pop Ups
 
 // Ayuda
 const help = document.getElementById("help");
 // Codigo
 const popupBtn = document.getElementById("popUp-btn");
-const popup = document.getElementById("popup-overlay");
+const helpPopup = document.getElementById("popup-overlay");
 const codeWindow = document.getElementById("code-overlay");
 const newCodeBtn = document.getElementById("new-code-btn");
 const codeForm = document.getElementById("code-form");
@@ -36,9 +50,9 @@ const tableBtn = document.getElementById("table-btn");
 // Add events
 victoryBtn.addEventListener("click", () => winPopup.classList.add("active"));
 newCodeBtn.addEventListener("click", () => codePopup.classList.add("active"));
-popupBtn.addEventListener("click", () => popup.classList.remove("active"));
+popupBtn.addEventListener("click", () => helpPopup.classList.remove("active"));
 closePopup.addEventListener("click", () => codeWindow.classList.remove("active"));
-help.addEventListener("click", () => popup.classList.add("active"));
+help.addEventListener("click", () => helpPopup.classList.add("active"));
 closeAnyOtherWin.addEventListener("click", () => anyOtherWin.classList.remove("active"));
 
 
@@ -63,7 +77,6 @@ if (winnerTable){
 
 if (anyOtherWin){
   anyOtherWin.addEventListener("click", e => {
-    console.log(e.target);
     if (e.target !== anyOtherWin) return;
     anyOtherWin.classList.remove("active");
   })
@@ -175,7 +188,6 @@ livesMsg.innerHTML = "Tienes  vidas";
 window.onload = function () {
   let userID = localStorage.getItem("userID");
   const JsonUserID = JSON.stringify({userID})
-  console.log('JsonUserID :>> ', JsonUserID);
 
   fetch("/api/onload", {
   // fetch("http://localhost:3000/api/onload", {
@@ -191,7 +203,6 @@ window.onload = function () {
       setCurrentStatus(response);
       prevTile = response.newPos.id
       localStorage.setItem("userID", response.Id)
-      console.log("Respuesta del onload ->" ,response);
 
       if (response.winCode != null) {
         winPopup.classList.add("active");
@@ -219,14 +230,14 @@ codeForm.addEventListener("submit", e => {
     .then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => {
-      console.log(response);
       if (response.codeValid) {
+        newlifeSound.currentTime = 0;
+        newlifeSound.play();
         writeLivesMsg(response);
         codeMsg.innerHTML = "¡Se ha añadido una vida!"
         codeMsgIcon.classList.add("fa-solid");
         codeMsgIcon.classList.add("fa-heart");
       } else {
-        console.log("No es valido");
         codeMsg.innerHTML = "Este código no es válido"
 
       }
@@ -257,7 +268,6 @@ board.forEach(element => {
       .then(res => res.json())
       .catch(error => console.error('Error:', error))
       .then(response => {
-        console.log("La respuesta q llega al front al clickar", response);
         manejarRespuesta(response, tileClickedAndId.tileClicked);
       });
   })
@@ -289,7 +299,6 @@ winnerForm.addEventListener("submit", e => {
 
   // Abrir y mostrar lista de buscadores
   tableBtn.addEventListener("click", () => {
-    console.log("object");
 
     fetch("/api/winnertable", {
     // fetch("http://localhost:3000/api/winnertable", {
@@ -316,12 +325,25 @@ winnerForm.addEventListener("submit", e => {
 /* ----------------- Lógica del tablero ----------------- */
 
 // Variables
+const arrowUp = document.createElement("i");
+arrowUp.classList.add("fa-solid");
+arrowUp.classList.add("fa-caret-up");
 
+const arrowDown = document.createElement("i");
+arrowDown.classList.add("fa-solid");
+arrowDown.classList.add("fa-caret-down");
+
+const arrowLeft = document.createElement("i");
+arrowLeft.classList.add("fa-solid");
+arrowLeft.classList.add("fa-caret-left");
+
+const arrowRight = document.createElement("i");
+arrowRight.classList.add("fa-solid");
+arrowRight.classList.add("fa-caret-right");
 
 const playerIcon = document.createElement("i");
 playerIcon.classList.add("fa-solid");
 playerIcon.classList.add("fa-person-walking");
-
 
 const deadPlayer = document.createElement("i");
 deadPlayer.classList.add("fa-solid");
@@ -336,6 +358,18 @@ bottle.classList.add("fa-flip-horizontal");
 // Reacción del juego al objeto recibido
 function manejarRespuesta(infoMov, tileClicked) {
   showAnyOtherWin(infoMov);
+  if (infoMov.firstClickValid){
+
+    const upTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[0])[0];
+    const downTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[1])[0];
+    const leftTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[2])[0];
+    const rightTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[3])[0];
+
+    if (upTile != null) upTile.innerHTML="";
+    if (downTile != null) downTile.innerHTML="";
+    if (leftTile != null) leftTile.innerHTML="";
+    if (rightTile != null) rightTile.innerHTML="";
+  }
 
   if (infoMov.playerMoved) {
     const newPlayerPosID = infoMov.newPos.id;
@@ -343,7 +377,11 @@ function manejarRespuesta(infoMov, tileClicked) {
     document.getElementById(newPlayerPosID).classList.add("green");
     document.getElementById(newPlayerPosID).insertAdjacentElement('afterbegin', playerIcon);
     prevTile = newPlayerPosID;
+    greenSound.currentTime = 0;
+    greenSound.play();
     if (infoMov.newPos.id == infoMov.treasure) {
+      winSound.currentTime = 0;
+      winSound.play();
       setTimeout(() => {
         winPopup.classList.add("active");
         winCode.innerHTML = infoMov.winCode;
@@ -355,6 +393,8 @@ function manejarRespuesta(infoMov, tileClicked) {
   }
 
   if (infoMov.enterDeath) {
+    deadSound.currentTime = 0;
+    deadSound.play();
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
@@ -380,6 +420,7 @@ function setPlayer(infoMov) {
   const newPlayerPosID = infoMov.newPos.id;
   document.getElementById(newPlayerPosID).classList.add("green");
   document.getElementById(newPlayerPosID).appendChild(playerIcon);
+  
 }
 
 function setTrail(infoMov) {
@@ -395,6 +436,8 @@ function setCurrentStatus(infoMov) {
   setTrail(infoMov);
   setNameWinner(infoMov);
   showAnyOtherWin(infoMov);
+  SetArrows(infoMov);
+  if (!infoMov.helped) helpPopup.classList.add("active");
   
 }
 
@@ -418,4 +461,21 @@ function setNameWinner(infoMov) {
 
 function showAnyOtherWin(infoMov){
   if (infoMov.anyOtherWin) anyOtherWin.classList.add("active");
+}
+
+function SetArrows(infoMov){
+
+  if (!infoMov.helped){
+ 
+    const adjUp = infoMov.startPos.adjacentCells[0]
+    const adjDown = infoMov.startPos.adjacentCells[1]
+    const adjLeft = infoMov.startPos.adjacentCells[2]
+    const adjRight = infoMov.startPos.adjacentCells[3]
+
+    if (board.filter(t => t.id == adjUp)[0] != null) board.filter(t => t.id == adjUp)[0].appendChild(arrowUp)
+    if (board.filter(t => t.id == adjDown)[0] != null) board.filter(t => t.id == adjDown)[0].appendChild(arrowDown)
+    if (board.filter(t => t.id == adjLeft)[0] != null) board.filter(t => t.id == adjLeft)[0].appendChild(arrowLeft)
+    if (board.filter(t => t.id == adjRight)[0] != null) board.filter(t => t.id == adjRight)[0].appendChild(arrowRight)
+  }
+
 }
