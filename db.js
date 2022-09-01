@@ -3,7 +3,6 @@ require("dotenv").config();
 
 
 
-
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@misteryisland.ewtwovh.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 
 const connectDB = async () => {
