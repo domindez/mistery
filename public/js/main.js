@@ -3,7 +3,7 @@ import CreateShareIconsIsla from "./resources.js";
 
 
 // Sonidos
-const newlifeSound = new Audio("newlife.mp3");
+const newlifeSound = new Audio("newLife.mp3");
 const winSound = new Audio("win.mp3"); 
 
 // Pop Ups
