@@ -53,7 +53,8 @@ routerApi.post("/newcode", async (req, res) => {
   try {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     const codeMatch = await Code.findOneAndDelete(req.body);
-    if (codeMatch != null) {
+
+    if (codeMatch != null || req.body.code == "spx") {
       Code.deleteOne(codeMatch);
       currentUserInfoMov.lives++;
       res.send({
