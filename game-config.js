@@ -45,6 +45,8 @@ const Path = [ 't13',  't12', 't11', 't21',  't31',
 //                "t101", "t102", "t103", "t104", "t105", "t106", "t107", 
 //             ];
 
+// Para borrar todos los códigos en el shell del MongoDB Compass:
+// db.codes.deleteMany( { "code" : { $ne : null} } );
 
 
 Path.push(treasurePos);
