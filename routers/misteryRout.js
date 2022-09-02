@@ -45,9 +45,9 @@ routerApi.post("/clicked", (req, res) => {
   const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
 
   // Quitar la botella para cerrar la Isla a cierta hora
-  const closingTime = 00;
+  const closingTime = 02;
   const openingTime = 13;
-  let timeNow = new Date().getUTCSeconds();
+  let timeNow = new Date().getUTCHours();
   const closeIsland = async () => {
     await Bottles.updateOne({ isBottle : true}, {isBottle : false})
     currentUserInfoMov.playTime = false;
