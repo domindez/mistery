@@ -351,20 +351,26 @@ bottle.classList.add("fa-flip-horizontal");
 
 // Reacción del juego al objeto recibido
 function manejarRespuesta(infoMov, tileClicked) {
-  showAnyOtherWin(infoMov);
-  if (infoMov.firstClickValid) {
+  
+  if (!infoMov.playTime){
+    playTimeOff.classList.add("active")
+  }else{
+
+    
+    showAnyOtherWin(infoMov);
+    if (infoMov.firstClickValid) {
 
     const upTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[0])[0];
     const downTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[1])[0];
     const leftTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[2])[0];
     const rightTile = board.filter(t => t.id == (infoMov.startPos.adjacentCells)[3])[0];
-
+    
     if (upTile != null) upTile.innerHTML = "";
     if (downTile != null) downTile.innerHTML = "";
     if (leftTile != null) leftTile.innerHTML = "";
     if (rightTile != null) rightTile.innerHTML = "";
   }
-
+  
   if (infoMov.playerMoved) {
     const newPlayerPosID = infoMov.newPos.id;
     if (prevTile != infoMov.treasure) document.getElementById(prevTile).innerHTML = "";
@@ -380,19 +386,19 @@ function manejarRespuesta(infoMov, tileClicked) {
         victoryBtn.classList.add("active");
       }, 1000)
     }
-
+    
     return
   }
-
+  
   if (infoMov.enterDeath) {
-
+    
     document.getElementById(tileClicked).classList.add("red");
     document.getElementById(tileClicked).appendChild(deadPlayer);
     document.getElementById(prevTile).innerHTML = "";
     writeLivesMsg(infoMov);
     setTimeout(function () { playerKilled(infoMov, tileClicked) }, 2000);
   }
-
+  }
 }
 
 /* ----------------- Definiciones Funciones ----------------- */

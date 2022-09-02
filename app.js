@@ -62,7 +62,6 @@ const allGames = []
 // Lo que pasa cuando se llama el evento
 movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
 
-
   const currentUserInfoMov = allGames.filter(x => x.Id == tileClickedAndId.id)[0];
   const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];

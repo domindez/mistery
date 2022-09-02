@@ -34,15 +34,25 @@ routerApi.post("/onload", async (req, res) => {
     res.send(userInfoMov);
   } else {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
+    if (await Bottles.findOne({ isBottle : true})) currentUserInfoMov.playTime = true;
     res.send(currentUserInfoMov);
   }
 });
 
 // Cuando clicas en un botón del juego
 routerApi.post("/clicked", (req, res) => {
-
   miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
   const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
+
+  // Quitar la botella para cerrar la Isla a cierta hora
+  const closingTime = 22;
+  let timeNow = new Date().getUTCHours();
+  const closeIsland = async () => {
+    await Bottles.updateOne({ isBottle : true}, {isBottle : false})
+    currentUserInfoMov.playTime = false;
+  }
+  if (timeNow >= closingTime) closeIsland  
+
   res.send(currentUserInfoMov);
   if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
   currentUserInfoMov.enterDeath = false;
