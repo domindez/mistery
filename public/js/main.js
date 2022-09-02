@@ -8,6 +8,8 @@ const winSound = new Audio("win.mp3");
 
 // Pop Ups
 
+// Play Time Off
+const playTimeOff = document.getElementById("play-time-off")
 // Ayuda
 const help = document.getElementById("help");
 // Codigo
@@ -419,14 +421,18 @@ function setTrail(infoMov) {
 }
 
 function setCurrentStatus(infoMov) {
-  writeLivesMsg(infoMov);
-  setPlayer(infoMov)
-  setTreasure(infoMov);
-  setTrail(infoMov);
-  setNameWinner(infoMov);
-  showAnyOtherWin(infoMov);
-  SetArrows(infoMov);
-  if (!infoMov.helped) helpPopup.classList.add("active");
+  if (!infoMov.playTime){
+    playTimeOff.classList.add("active")
+  }else{
+    writeLivesMsg(infoMov);
+    setPlayer(infoMov)
+    setTreasure(infoMov);
+    setTrail(infoMov);
+    setNameWinner(infoMov);
+    showAnyOtherWin(infoMov);
+    SetArrows(infoMov);
+    if (!infoMov.helped) helpPopup.classList.add("active");
+  }
 
 }
 

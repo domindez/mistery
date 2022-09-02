@@ -6,7 +6,7 @@ const { grid, initialPos, treasure } = require("../game-board/board")
 const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
-// const { findOne, findOneAndUpdate } = require("../models/code.js");
+const Bottles = require("../models/bottles.js");
 
 // Conectar a la base de datos
 connectDB();
@@ -29,13 +29,13 @@ routerApi.post("/onload", async (req, res) => {
     const newID = new Date().getTime();
     const userInfoMov = JSON.parse(JSON.stringify(miApp.infoMov));
     userInfoMov.Id = newID;
+    await CheckPlayTime(userInfoMov);
     miApp.allGames.push(userInfoMov);
     res.send(userInfoMov);
   } else {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     res.send(currentUserInfoMov);
   }
-
 });
 
 // Cuando clicas en un botón del juego
@@ -106,6 +106,21 @@ routerApi.get("/winnertable", async (req, res) => {
 
 
 
+
+
+async function CheckPlayTime(userInfoMov){
+  let anyWin;
+  miApp.allGames.forEach(element => { 
+    if (element.isWin) {
+      anyWin = true;
+    }else{
+      anyWin = false;
+    }     
+  });
+
+  if (await Bottles.findOne({ isBottle : false}) && !anyWin) userInfoMov.playTime = false;
+
+}
 
 
 module.exports = routerApi;

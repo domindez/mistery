@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const EventEmitter = require("events");
 const rutasApi = require("./routers/misteryRout");
+const Bottles = require("./models/bottles.js");
 // Importar el grid
 const { grid, initialPos, treasure } = require("./game-board/board")
 const { recordingNewPath, codeToWin } = require("./game-config")
@@ -33,6 +34,7 @@ app.listen(PORT, () => {
 // Objeto para devolver al front
 
 const infoMov = {
+  playTime: true,
   Id: null,
   lives: 0,
   firstClickValid: false,
@@ -122,6 +124,8 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
       currentUserInfoMov.canMove = false;
       currentUserInfoMov.winCode = codeToWin;
       currentUserInfoMov.isWin = true;
+      const TakeBottle = async () => await Bottles.updateOne({ isBottle : true }, { isBottle : false});
+      TakeBottle();
       return;
     }
 

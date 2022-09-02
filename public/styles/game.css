@@ -22,6 +22,7 @@ button {
     border-radius: 10px;
     cursor: pointer;
     color: black;
+    
 }
 
 .table-btn:active {
@@ -199,10 +200,16 @@ button {
     margin-top: 0px;
     width: 100px;
     height: 30px;
-    background-color: #c4f9ff;
-    box-shadow: 2px 2px 2px #020e033a;
-    border: solid 2px #40e3f5;
+    background-color: #a8b687;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.393);
+    padding: 20px 10px;
+    border: none;
+    border-radius: 5px;
     font-size: 1em;
+    color: black;
+
+    
+
 
 }
 

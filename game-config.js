@@ -17,7 +17,7 @@ const treasurePos ="t95";
 
 const codeToWin = "XJO3D"
 
-let recordingNewPath = true;
+let recordingNewPath = false;
 
 const Path = [ 't13',  't12', 't11', 't21',  't31',
   't41',  't42', 't52', 't62',  't61',
