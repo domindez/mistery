@@ -28,14 +28,7 @@ async function CheckPlayTime(userInfoMov){
   if (await Bottles.findOne({ isBottle : false}) && !anyWin) userInfoMov.playTime = false;
 }
 
-const SetCodeToWin = async () =>{
-  let winCode;
-  let bottle = await Bottles.findOne({ isBottle : true });
-  bottle ? winCode = bottle.codeToWin : winCode = null;
-  return winCode
-}
 
 module.exports = { CloseIsland: CloseIsland,
-  CheckPlayTime : CheckPlayTime,
-  SetCodeToWin : SetCodeToWin
+  CheckPlayTime : CheckPlayTime
 }

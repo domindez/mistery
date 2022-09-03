@@ -73,7 +73,7 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
 
   currentUserInfoMov.helped = true;
   CloseIsland(currentUserInfoMov);
-  CheckPlayTime(currentUserInfoMov);
+  if (!currentUserInfoMov.isWin) CheckPlayTime(currentUserInfoMov);
 
   // Comprobar si alguien ha ganado ya
   let anyWin;

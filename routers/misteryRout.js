@@ -7,20 +7,28 @@ const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
 const Bottles = require("../models/bottles.js");
-const { CloseIsland, CheckPlayTime, SetCodeToWin } = require("../backend-functions/back-func")
+const { CloseIsland, CheckPlayTime } = require("../backend-functions/back-func")
 
 // Conectar a la base de datos
 connectDB();
 
-// Anular sesiones anteriores a este time limit.
 let timeLimit;
 
+// Anular sesiones anteriores a este time limit.
 function setTimeLimit() {
   timeLimit = new Date().getTime();
 }
 
 setTimeLimit();
 
+
+let winCode;
+const SetCodeToWin = async () =>{
+  let bottle = await Bottles.findOne({ isBottle : true });
+  bottle ? winCode = bottle.codeToWin : winCode = null;
+}
+
+SetCodeToWin()
 
 
 
@@ -42,10 +50,10 @@ routerApi.post("/onload", async (req, res) => {
 });
 
 // Cuando clicas en un botón del juego
-routerApi.post("/clicked", async (req, res) => {
+routerApi.post("/clicked", (req, res) => {
   miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
   const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
-  if (currentUserInfoMov.isWin) currentUserInfoMov.winCode = await SetCodeToWin()
+  if (currentUserInfoMov.isWin) currentUserInfoMov.winCode = winCode
   console.log('En las rutas para enviar :>> ', miApp.allGames);
   res.send(currentUserInfoMov);
   if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
