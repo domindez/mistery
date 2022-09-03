@@ -6,6 +6,7 @@ const Bottles = require("./models/bottles.js");
 // Importar el grid
 const { grid, initialPos, treasure } = require("./game-board/board")
 const { recordingNewPath, codeToWin } = require("./game-config")
+const { CloseIsland, CheckPlayTime } = require("./backend-functions/back-func")
 
 // Inicialización
 const app = express();
@@ -36,7 +37,7 @@ app.listen(PORT, () => {
 const infoMov = {
   playTime: true,
   Id: null,
-  lives: 0,
+  lives: 02,
   firstClickValid: false,
   playerMoved: false,
   startPos: initialPos,
@@ -66,6 +67,10 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
   const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
 
+  CloseIsland(currentUserInfoMov);
+  CheckPlayTime(currentUserInfoMov);
+
+
   currentUserInfoMov.helped = true;
 
   // Comprobar si alguien ha ganado ya
@@ -87,6 +92,9 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
 
   if (!(currentUserInfoMov.lives > 0 && currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) && currentUserInfoMov.canMove)) {
     console.log("No se puede ir");
+    console.log('currentUserInfoMov.lives :>> ', currentUserInfoMov.lives);
+    console.log('currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) :>> ', currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id));
+    console.log('currentUserInfoMov.canMove :>> ', currentUserInfoMov.canMove);
     return;
   }
 
@@ -123,7 +131,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
       currentUserInfoMov.canMove = false;
       currentUserInfoMov.winCode = codeToWin;
       currentUserInfoMov.isWin = true;
-      const TakeBottle = async () => await Bottles.updateOne({ isBottle : true }, { isBottle : false});
+      const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
       TakeBottle();
       return;
     }

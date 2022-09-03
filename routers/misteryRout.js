@@ -7,6 +7,7 @@ const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
 const Bottles = require("../models/bottles.js");
+const { CloseIsland, CheckPlayTime } = require("../backend-functions/back-func")
 
 // Conectar a la base de datos
 connectDB();
@@ -29,6 +30,7 @@ routerApi.post("/onload", async (req, res) => {
     const newID = new Date().getTime();
     const userInfoMov = JSON.parse(JSON.stringify(miApp.infoMov));
     userInfoMov.Id = newID;
+    await CloseIsland(userInfoMov);
     await CheckPlayTime(userInfoMov);
     miApp.allGames.push(userInfoMov);
     res.send(userInfoMov);
@@ -40,20 +42,9 @@ routerApi.post("/onload", async (req, res) => {
 });
 
 // Cuando clicas en un botón del juego
-routerApi.post("/clicked", (req, res) => {
+routerApi.post("/clicked", async (req, res) => {
   miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
   const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
-
-  // Quitar la botella para cerrar la Isla a cierta hora
-  const closingTime = 02;
-  const openingTime = 13;
-  let timeNow = new Date().getUTCHours();
-  const closeIsland = async () => {
-    await Bottles.updateOne({ isBottle : true}, {isBottle : false})
-    currentUserInfoMov.playTime = false;
-  }
-  if (timeNow >= closingTime && timeNow <= openingTime) closeIsland();
-
   res.send(currentUserInfoMov);
   if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
   currentUserInfoMov.enterDeath = false;
@@ -114,24 +105,6 @@ routerApi.get("/winnertable", async (req, res) => {
     console.log(error);
   }
 });
-
-
-
-
-
-async function CheckPlayTime(userInfoMov){
-  let anyWin;
-  miApp.allGames.forEach(element => { 
-    if (element.isWin) {
-      anyWin = true;
-    }else{
-      anyWin = false;
-    }     
-  });
-
-  if (await Bottles.findOne({ isBottle : false}) && !anyWin) userInfoMov.playTime = false;
-
-}
 
 
 module.exports = routerApi;

@@ -2,22 +2,23 @@
     /*-------------------------------------------------------#
     | |                PARA RECONFIGURAR:                    |
     | |                                                      |
-    | |  1. Vaciar el Path.                                  |
-    | |  2. Poner la Posición Inicial y el tesoro.           |
-    | |  3. Activar el RecordingPath                         |
-    | |  4. Marcar el camino y copìar la array en el Path    |
-    | |  5. DESACTIVAR el RecordingPath                      |
+    | |  1. Activar el Path sin rojas.                       |
+    | |  2. Vaciar el Path.                                  |
+    | |  3. Poner la Posición Inicial y el tesoro.           |
+    | |  4. Activar el RecordingPath                         |
+    | |  5. Marcar el camino y copìar la array en el Path    |
+    | |  6. DESACTIVAR el RecordingPath                      |
     | |                                                      |             
     | /------------------------------------------------------|
     /------------------------------------------------------*/
 
+let recordingNewPath = false;
 
 const startPos = "t23";
 const treasurePos ="t95";
 
 const codeToWin = "XJO3D"
 
-let recordingNewPath = false;
 
 const Path = [ 't13',  't12', 't11', 't21',  't31',
   't41',  't42', 't52', 't62',  't61',
@@ -49,6 +50,9 @@ const Path = [ 't13',  't12', 't11', 't21',  't31',
 // db.codes.deleteMany( { "code" : { $ne : null} } );
 
 
+const closingTime = 01
+const openingTime = 03
+
 Path.push(treasurePos);
 
 module.exports = {
@@ -56,5 +60,7 @@ module.exports = {
     treasurePos : treasurePos,
     Path : Path,
     recordingNewPath : recordingNewPath,
-    codeToWin : codeToWin
+    codeToWin : codeToWin,
+    openingTime : openingTime,
+    closingTime : closingTime
 }
