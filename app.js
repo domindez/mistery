@@ -35,8 +35,8 @@ app.listen(PORT, () => {
 // Objeto para devolver al front
 
 const infoMov = {
-  playTime: true,
   Id: null,
+  playTime: true,
   lives: 0,
   firstClickValid: false,
   playerMoved: false,
