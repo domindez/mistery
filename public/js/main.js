@@ -183,8 +183,8 @@ window.onload = function () {
   let userID = localStorage.getItem("userID");
   const JsonUserID = JSON.stringify({ userID })
 
-  // fetch("/api/onload", {
-    fetch("http://localhost:3000/api/onload", {
+  fetch("/api/onload", {
+    // fetch("http://localhost:3000/api/onload", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -213,8 +213,8 @@ codeForm.addEventListener("submit", e => {
   let code = document.getElementById("code-input").value;
   const JSONcode = JSON.stringify({ code, userID });
 
-  // fetch("/api/newcode", {
-    fetch("http://localhost:3000/api/newcode", {
+  fetch("/api/newcode", {
+    // fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -251,8 +251,8 @@ board.forEach(element => {
     tileClickedAndId.id = localStorage.getItem("userID");
     let jsonTileClickedAndId = JSON.stringify(tileClickedAndId)
 
-    // fetch("/api/clicked", {
-      fetch("http://localhost:3000/api/clicked", {
+    fetch("/api/clicked", {
+      // fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -263,7 +263,6 @@ board.forEach(element => {
       .catch(error => console.error('Error:', error))
       .then(response => {
         manejarRespuesta(response, tileClickedAndId.tileClicked);
-        console.log(response);
       });
   })
 });
@@ -276,8 +275,8 @@ winnerForm.addEventListener("submit", e => {
   let winnerName = document.getElementById("winner-name").value;
   const JSONcode = JSON.stringify({ nombre: winnerName, userID });
 
-  // fetch("/api/newwinner", {
-    fetch("http://localhost:3000/api/newwinner", {
+  fetch("/api/newwinner", {
+    // fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -295,8 +294,8 @@ winnerForm.addEventListener("submit", e => {
 // Abrir y mostrar lista de buscadores
 tableBtn.addEventListener("click", () => {
 
-  // fetch("/api/winnertable", {
-    fetch("http://localhost:3000/api/winnertable", {
+  fetch("/api/winnertable", {
+    // fetch("http://localhost:3000/api/winnertable", {
     method: "GET"
   })
     .then(res => res.json())
