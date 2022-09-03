@@ -1,3 +1,6 @@
+const { set } = require("mongoose");
+const Bottles = require("./models/bottles.js");
+
 
     /*-------------------------------------------------------#
     | |                PARA RECONFIGURAR:                    |
@@ -12,12 +15,11 @@
     | /------------------------------------------------------|
     /------------------------------------------------------*/
 
+
 let recordingNewPath = false;
 
-const startPos = "t23";
-const treasurePos ="t95";
-
-const codeToWin = "XJO3D"
+let startPos = "t23";
+let treasurePos ="t95";
 
 
 const Path = [ 't13',  't12', 't11', 't21',  't31',
@@ -60,7 +62,6 @@ module.exports = {
     treasurePos : treasurePos,
     Path : Path,
     recordingNewPath : recordingNewPath,
-    codeToWin : codeToWin,
     openingTime : openingTime,
     closingTime : closingTime
 }

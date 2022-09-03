@@ -57,21 +57,23 @@ const newPath = [];
 
 const movementsEmitter = new EventEmitter();
 
+
+
+
+
 // Crear array de todas las sesiones
 const allGames = []
 
 // Lo que pasa cuando se llama el evento
-movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
+movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
 
   const currentUserInfoMov = allGames.filter(x => x.Id == tileClickedAndId.id)[0];
   const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
 
+  currentUserInfoMov.helped = true;
   CloseIsland(currentUserInfoMov);
   CheckPlayTime(currentUserInfoMov);
-
-
-  currentUserInfoMov.helped = true;
 
   // Comprobar si alguien ha ganado ya
   let anyWin;
@@ -92,9 +94,6 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
 
   if (!(currentUserInfoMov.lives > 0 && currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) && currentUserInfoMov.canMove)) {
     console.log("No se puede ir");
-    console.log('currentUserInfoMov.lives :>> ', currentUserInfoMov.lives);
-    console.log('currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) :>> ', currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id));
-    console.log('currentUserInfoMov.canMove :>> ', currentUserInfoMov.canMove);
     return;
   }
 
@@ -129,7 +128,7 @@ movementsEmitter.on("playerWantToMove", (tileClickedAndId, grid) => {
     if (playerDestiny == treasureTile) {
       console.log("has ganado");
       currentUserInfoMov.canMove = false;
-      currentUserInfoMov.winCode = codeToWin;
+      console.log("emitter", currentUserInfoMov);
       currentUserInfoMov.isWin = true;
       const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
       TakeBottle();

@@ -7,7 +7,7 @@ const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
 const Bottles = require("../models/bottles.js");
-const { CloseIsland, CheckPlayTime } = require("../backend-functions/back-func")
+const { CloseIsland, CheckPlayTime, SetCodeToWin } = require("../backend-functions/back-func")
 
 // Conectar a la base de datos
 connectDB();
@@ -45,6 +45,8 @@ routerApi.post("/onload", async (req, res) => {
 routerApi.post("/clicked", async (req, res) => {
   miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
   const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
+  if (currentUserInfoMov.isWin) currentUserInfoMov.winCode = await SetCodeToWin()
+  console.log('En las rutas para enviar :>> ', miApp.allGames);
   res.send(currentUserInfoMov);
   if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
   currentUserInfoMov.enterDeath = false;
@@ -56,7 +58,7 @@ routerApi.post("/newcode", async (req, res) => {
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
     const codeMatch = await Code.findOneAndDelete(req.body);
 
-    if (codeMatch != null || req.body.code == "spx") {
+    if (codeMatch != null || req.body.code == "spx" || req.body.code == "BigWhoop") {
       Code.deleteOne(codeMatch);
       currentUserInfoMov.lives++;
       res.send({

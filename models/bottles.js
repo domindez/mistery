@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const bottlesSchema = new Schema({
-    isBottle: Boolean
+    isBottle: Boolean,
+    codeToWin : String
 })
 
 // Crear modelo
