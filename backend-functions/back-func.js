@@ -16,16 +16,15 @@ const CloseIsland = async (infoMov) => {
 
 // Cerrar la isla si no hay botella y nadie ha ganado
 async function CheckPlayTime(userInfoMov){
+ 
+  let noBottle = await Bottles.findOne({ isBottle : false})
   let anyWin;
-  miApp.allGames.forEach(element => { 
-    if (element.isWin) {
-      anyWin = true;
-    }else{
-      anyWin = false;
-    }     
-  });
-
-  if (await Bottles.findOne({ isBottle : false}) && !anyWin) userInfoMov.playTime = false;
+  if (noBottle){
+    miApp.allGames.forEach(element => {
+      if (element.isWin) anyWin = true;
+    });
+  }
+  if (noBottle && !anyWin) userInfoMov.playTime = false;
 }
 
 

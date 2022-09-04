@@ -37,7 +37,7 @@ app.listen(PORT, () => {
 const infoMov = {
   Id: null,
   playTime: true,
-  lives: 0,
+  lives: 20,
   firstClickValid: false,
   playerMoved: false,
   startPos: initialPos,
@@ -128,7 +128,6 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
     if (playerDestiny == treasureTile) {
       console.log("has ganado");
       currentUserInfoMov.canMove = false;
-      console.log("emitter", currentUserInfoMov);
       currentUserInfoMov.isWin = true;
       const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
       TakeBottle();

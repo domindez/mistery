@@ -11,21 +11,15 @@ const { CloseIsland, CheckPlayTime } = require("../backend-functions/back-func")
 // Conectar a la base de datos
 connectDB();
 
-let timeLimit;
 
 // Anular sesiones anteriores a este time limit.
+let timeLimit;
 function setTimeLimit() {
   timeLimit = new Date().getTime();
 }
 
-let winCode;
-const SetCodeToWin = async () => {
-  let bottle = await Bottles.findOne({ isBottle: true });
-  bottle ? winCode = bottle.codeToWin : winCode = null;
-}
-
 setTimeLimit();
-SetCodeToWin();
+
 
 // Onload
 routerApi.post("/onload", async (req, res) => {
@@ -49,12 +43,21 @@ routerApi.post("/onload", async (req, res) => {
 });
 
 // Cuando clicas en un botón del juego
-routerApi.post("/clicked", (req, res) => {
+routerApi.post("/clicked", async (req, res) => {
   try {
     miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
+    console.log(grid);
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
-    if (currentUserInfoMov.isWin) currentUserInfoMov.winCode = winCode
-    console.log('En las rutas para enviar :>> ', miApp.allGames);
+    if (currentUserInfoMov.isWin){
+      // currentUserInfoMov.winCode = winCode
+      let bottleWinCode = await Bottles.findOne({ isBottle : true});
+      if (bottleWinCode){
+        console.log('wincode :>> ', bottleWinCode);
+        console.log('currentUserInfoMov :>> ', currentUserInfoMov);
+        bottleWinCode = bottleWinCode.codeToWin;
+        currentUserInfoMov.winCode = bottleWinCode;
+      }
+    } 
     res.send(currentUserInfoMov);
     if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
     currentUserInfoMov.enterDeath = false;

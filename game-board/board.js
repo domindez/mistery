@@ -1,4 +1,4 @@
-const { startPos, treasurePos, Path } = require("../game-config")
+const { startPos, treasurePos, Path, Chupitos } = require("../game-config")
 
 // Board
 
@@ -39,15 +39,16 @@ const treasureTile = grid.filter(t => t.id == xMarkTheSpot)[0];
 treasureTile.treasue = true;
 
 // Set death tiles con lo que viene del game config
-
-grid.forEach(() => {
-  deathTiles = grid.filter(t => Path.includes(t.id) == false)
-});
-
+deathTiles = grid.filter(t => Path.includes(t.id) == false)
 deathTiles.forEach(tile => {
   tile.death = true
 });
 
+// Set chupitos
+chupitosTiles = grid.filter(t => Chupitos.includes(t.id))
+chupitosTiles.forEach(tile => {
+  tile.chupito = true;
+});
 
 
 module.exports = {
