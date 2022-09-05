@@ -12,6 +12,8 @@ const winSound = new Audio("win.mp3");
 const playTimeOff = document.getElementById("play-time-off")
 // Ayuda
 const help = document.getElementById("help");
+// Chupito
+const chupitoPopup = document.getElementById("popup-chupito");
 // Codigo
 const popupBtn = document.getElementById("popUp-btn");
 const helpPopup = document.getElementById("popup-overlay");
@@ -351,6 +353,7 @@ bottle.classList.add("fa-flip-horizontal");
 
 // Reacción del juego al objeto recibido
 function manejarRespuesta(infoMov, tileClicked) {
+  console.log(infoMov);
   
   if (!infoMov.playTime){
     playTimeOff.classList.add("active")
@@ -370,7 +373,7 @@ function manejarRespuesta(infoMov, tileClicked) {
     if (leftTile != null) leftTile.innerHTML = "";
     if (rightTile != null) rightTile.innerHTML = "";
   }
-  
+
   if (infoMov.playerMoved) {
     const newPlayerPosID = infoMov.newPos.id;
     if (prevTile != infoMov.treasure) document.getElementById(prevTile).innerHTML = "";
@@ -386,10 +389,14 @@ function manejarRespuesta(infoMov, tileClicked) {
         victoryBtn.classList.add("active");
       }, 1000)
     }
+    if (infoMov.chupito) {
+      chupitoPopup.classList.add("active");
+      console.log("ha entrado");
+    }
     
     return
   }
-  
+
   if (infoMov.enterDeath) {
     
     document.getElementById(tileClicked).classList.add("red");
@@ -398,6 +405,8 @@ function manejarRespuesta(infoMov, tileClicked) {
     writeLivesMsg(infoMov);
     setTimeout(function () { playerKilled(infoMov, tileClicked) }, 2000);
   }
+
+
   }
 }
 

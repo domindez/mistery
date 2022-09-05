@@ -4,9 +4,9 @@ const EventEmitter = require("events");
 const rutasApi = require("./routers/misteryRout");
 const Bottles = require("./models/bottles.js");
 // Importar el grid
-const { grid, initialPos, treasure } = require("./game-board/board")
-const { recordingNewPath, codeToWin, BOTTLEID, startPos } = require("./game-config")
-const { CloseIsland, CheckPlayTime } = require("./backend-functions/back-func")
+const { initialPos, treasure } = require("./game-board/board")
+const { recordingNewPath, BOTTLEID } = require("./game-config")
+const { CloseIsland, CheckPlayTime, CreateNewPath, TakeBottle, Die } = require("./backend-functions/back-func")
 
 // Inicialización
 const app = express();
@@ -43,6 +43,8 @@ const infoMov = {
   startPos: initialPos,
   newPos: initialPos,
   enterDeath: false,
+  chupito: false,
+  chupitoCode: null,
   treasure: treasure,
   trail: [initialPos],
   canMove: true,
@@ -91,6 +93,7 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
 
   if (!(currentUserInfoMov.lives > 0 && currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) && currentUserInfoMov.canMove)) {
     console.log("No se puede ir");
+    // Si está activo el recording entonces poner chupitos
     if (recordingNewPath && currentUserInfoMov.newPos == playerDestiny) {
       chupitosPath.push(playerDestiny.id);
     console.log("chupito añadido");
@@ -100,19 +103,11 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
 
   // Si entra aquí es porq está vivo y le ha dado a la casilla de al lado
   currentUserInfoMov.firstClickValid = true;
-
+  
   if (playerDestiny.death) {
-    console.log("Ha entrado en una casilla de muerte");
-    currentUserInfoMov.playerMoved = false;
-    currentUserInfoMov.enterDeath = true;
-    currentUserInfoMov.lives--;
-    currentUserInfoMov.newPos = initialPos;
-    currentUserInfoMov.canMove = false;
-    setTimeout(() => { currentUserInfoMov.canMove = true }, 2000)
+    Die(currentUserInfoMov, initialPos);
     return;
   }
-
-
 
   else {
     // logica de moverse
@@ -120,10 +115,22 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
     currentUserInfoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
     currentUserInfoMov.playerMoved = true;
     currentUserInfoMov.trail.push(currentUserInfoMov.newPos);
+    if (playerDestiny.chupito) {
+
+      // TODO Aquí volver a sacar la array de las casillas con chupito como ya se hizo en el board
+      // para ver si aun está el chupito. Creo que hay que borrar lo de pintar los chupitos y a cada movimiento
+      // mirar si hay chupito, para q en cuanto alguien lo coja ya no salga más lo del chupito.
+
+      // const doc = await Bottles.findById(BOTTLEID);
+      
+      // currentUserInfoMov.chupito = true;
+      
+      console.log("Casilla con POSIBLE chupito");
+    }
+    
     // Si está activado para grabar un nuevo camino:
     if (recordingNewPath) {
       if (!newPath.includes(currentUserInfoMov.newPos.id)) newPath.push(currentUserInfoMov.newPos.id);
-      // console.log(newPath);
     }
 
     // logica de ganar
@@ -131,22 +138,10 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
       console.log("has ganado");
       currentUserInfoMov.canMove = false;
       currentUserInfoMov.isWin = true;
-      if (recordingNewPath){
-        const doc = await Bottles.findById(BOTTLEID)
-        doc.path = newPath;
-        doc.path.push(startPos)
-        doc.chupitos = chupitosPath;
-        doc.save()
-        console.log('Nuevo Path :>> ', doc.path);
-        console.log('Chupitos en :>> ', doc.chupitos);
-        console.log('bien')
-      }
-      const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
-      TakeBottle();
+      if (recordingNewPath) CreateNewPath(newPath, chupitosPath)
+      if (!recordingNewPath) TakeBottle();
       return;
     }
-
-
   }
 });
 

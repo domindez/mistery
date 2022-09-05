@@ -1,5 +1,6 @@
 const { startPos, treasurePos, BOTTLEID, recordingNewPath } = require("../game-config")
 const Bottles = require("../models/bottles");
+const { setDeathTilesAndChupitos } = require("../backend-functions/back-func")
 
 // Board
 
@@ -39,29 +40,8 @@ const xMarkTheSpot = treasurePos
 const treasureTile = grid.filter(t => t.id == xMarkTheSpot)[0];
 treasureTile.treasue = true;
 
-// Set death tiles con lo que viene del game config
-const setDeathTilesAndChupitos = async () =>{
-  if (recordingNewPath) return
 
-  doc = await Bottles.findById(BOTTLEID);
-  const path = doc.path;
-  const chupitos = doc.chupitos
-  // Poner casillas de muerte
-  deathTiles = grid.filter(t => (path.includes(t.id) == false))
-  deathTiles.forEach(tile => {
-    tile.death = true
-  });
-
-  // Poner casillas de chupitos con su código
-  chupitosTiles = grid.filter(t => chupitos.includes(t.id))
-  chupitosTiles.forEach(tile => {
-    tile.chupito = true
-  });
-
-}
-
-
-setDeathTilesAndChupitos();
+setDeathTilesAndChupitos(grid);
 
 
 

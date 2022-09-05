@@ -1,7 +1,7 @@
 const express = require("express");
 const routerApi = express.Router();
 const miApp = require("../app");
-const { grid, initialPos, treasure } = require("../game-board/board")
+const { grid, initialPos } = require("../game-board/board")
 const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
@@ -48,7 +48,6 @@ routerApi.post("/clicked", async (req, res) => {
     miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
     if (currentUserInfoMov.isWin){
-      // currentUserInfoMov.winCode = winCode
       let bottleWinCode = await Bottles.findOne({ isBottle : true});
       if (bottleWinCode){
         bottleWinCode = bottleWinCode.codeToWin;
@@ -56,6 +55,7 @@ routerApi.post("/clicked", async (req, res) => {
       }
     } 
     res.send(currentUserInfoMov);
+    if (currentUserInfoMov.chupito) currentUserInfoMov.chupito = false
     if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
     currentUserInfoMov.enterDeath = false;
     
