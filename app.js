@@ -5,7 +5,7 @@ const rutasApi = require("./routers/misteryRout");
 const Bottles = require("./models/bottles.js");
 // Importar el grid
 const { grid, initialPos, treasure } = require("./game-board/board")
-const { recordingNewPath, codeToWin } = require("./game-config")
+const { recordingNewPath, codeToWin, BOTTLEID, startPos } = require("./game-config")
 const { CloseIsland, CheckPlayTime } = require("./backend-functions/back-func")
 
 // Inicialización
@@ -54,11 +54,8 @@ const infoMov = {
 }
 
 const newPath = [];
-
+const chupitosPath = [];
 const movementsEmitter = new EventEmitter();
-
-
-
 
 
 // Crear array de todas las sesiones
@@ -94,6 +91,10 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
 
   if (!(currentUserInfoMov.lives > 0 && currentUserInfoMov.newPos.adjacentCells.includes(playerDestiny.id) && currentUserInfoMov.canMove)) {
     console.log("No se puede ir");
+    if (recordingNewPath && currentUserInfoMov.newPos == playerDestiny) {
+      chupitosPath.push(playerDestiny.id);
+    console.log("chupito añadido");
+  }
     return;
   }
 
@@ -122,13 +123,24 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
     // Si está activado para grabar un nuevo camino:
     if (recordingNewPath) {
       if (!newPath.includes(currentUserInfoMov.newPos.id)) newPath.push(currentUserInfoMov.newPos.id);
-      console.log(newPath);
+      // console.log(newPath);
     }
+
     // logica de ganar
     if (playerDestiny == treasureTile) {
       console.log("has ganado");
       currentUserInfoMov.canMove = false;
       currentUserInfoMov.isWin = true;
+      if (recordingNewPath){
+        const doc = await Bottles.findById(BOTTLEID)
+        doc.path = newPath;
+        doc.path.push(startPos)
+        doc.chupitos = chupitosPath;
+        doc.save()
+        console.log('Nuevo Path :>> ', doc.path);
+        console.log('Chupitos en :>> ', doc.chupitos);
+        console.log('bien')
+      }
       const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
       TakeBottle();
       return;

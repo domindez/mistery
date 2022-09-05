@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 const bottlesSchema = new Schema({
     isBottle: Boolean,
-    codeToWin : String
+    codeToWin : String,
+    path : Array,
+    chupitos : Array
 })
 
 // Crear modelo

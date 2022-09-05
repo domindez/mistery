@@ -46,14 +46,11 @@ routerApi.post("/onload", async (req, res) => {
 routerApi.post("/clicked", async (req, res) => {
   try {
     miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
-    console.log(grid);
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
     if (currentUserInfoMov.isWin){
       // currentUserInfoMov.winCode = winCode
       let bottleWinCode = await Bottles.findOne({ isBottle : true});
       if (bottleWinCode){
-        console.log('wincode :>> ', bottleWinCode);
-        console.log('currentUserInfoMov :>> ', currentUserInfoMov);
         bottleWinCode = bottleWinCode.codeToWin;
         currentUserInfoMov.winCode = bottleWinCode;
       }
