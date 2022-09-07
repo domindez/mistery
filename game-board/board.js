@@ -1,6 +1,6 @@
 const { startPos, treasurePos, BOTTLEID, recordingNewPath } = require("../game-config")
 const Bottles = require("../models/bottles");
-const { setDeathTilesAndChupitos } = require("../backend-functions/back-func")
+const { setDeathTiles: setDeathTiles } = require("../backend-functions/back-func")
 
 // Board
 
@@ -41,7 +41,7 @@ const treasureTile = grid.filter(t => t.id == xMarkTheSpot)[0];
 treasureTile.treasue = true;
 
 
-setDeathTilesAndChupitos(grid);
+setDeathTiles(grid);
 
 
 

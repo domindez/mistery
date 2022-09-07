@@ -73,26 +73,14 @@ function Die(currentUserInfoMov, initialPos){
 const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
 
 // Set death tiles y chupitos
-const setDeathTilesAndChupitos = async (grid) =>{
+const setDeathTiles = async (grid) =>{
   if (recordingNewPath) return
   doc = await Bottles.findById(BOTTLEID);
   const path = doc.path;
-  const chupitos = doc.chupitos
   // Poner casillas de muerte
   deathTiles = grid.filter(t => (path.includes(t.id) == false))
   deathTiles.forEach(tile => {
     tile.death = true
-  });
-  
-  // Poner casillas de chupitos
-  console.log(chupitos);
-  const tileList = []
-  chupitos.forEach(obj => {
-    tileList.push(obj.tile)
-  });
-  chupitosTiles = grid.filter(t => tileList.includes(t.id))
-  chupitosTiles.forEach(tile => {
-    tile.chupito = true
   });
 }
 
@@ -103,5 +91,5 @@ module.exports = { CloseIsland: CloseIsland,
   CreateNewPath : CreateNewPath,
   TakeBottle : TakeBottle,
   Die : Die,
-  setDeathTilesAndChupitos: setDeathTilesAndChupitos
+  setDeathTiles: setDeathTiles
 }

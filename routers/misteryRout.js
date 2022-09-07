@@ -6,7 +6,8 @@ const { connectDB } = require("../db")
 const Code = require("../models/code.js")
 const Winner = require("../models/winner.js");
 const Bottles = require("../models/bottles.js");
-const { CloseIsland, CheckPlayTime } = require("../backend-functions/back-func")
+const { CloseIsland, CheckPlayTime } = require("../backend-functions/back-func");
+const { BOTTLEID } = require("../game-config");
 
 // Conectar a la base de datos
 connectDB();
@@ -47,15 +48,11 @@ routerApi.post("/clicked", async (req, res) => {
   try {
     miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
-    if (currentUserInfoMov.isWin){
-      let bottleWinCode = await Bottles.findOne({ isBottle : true});
-      if (bottleWinCode){
-        bottleWinCode = bottleWinCode.codeToWin;
-        currentUserInfoMov.winCode = bottleWinCode;
-      }
-    } 
     res.send(currentUserInfoMov);
+    console.log("Enviado al Front");
+
     if (currentUserInfoMov.chupito) currentUserInfoMov.chupito = false
+    if (currentUserInfoMov.chupitoCode != null) currentUserInfoMov.chupitoCode = null
     if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
     currentUserInfoMov.enterDeath = false;
     

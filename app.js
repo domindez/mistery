@@ -115,18 +115,36 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
     currentUserInfoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
     currentUserInfoMov.playerMoved = true;
     currentUserInfoMov.trail.push(currentUserInfoMov.newPos);
-    if (playerDestiny.chupito) {
+    
+    console.log("moviendo");
 
-      // TODO Aquí volver a sacar la array de las casillas con chupito como ya se hizo en el board
-      // para ver si aun está el chupito. Creo que hay que borrar lo de pintar los chupitos y a cada movimiento
-      // mirar si hay chupito, para q en cuanto alguien lo coja ya no salga más lo del chupito.
 
-      // const doc = await Bottles.findById(BOTTLEID);
+    // const doc = await Bottles.findById(BOTTLEID);
+    // let chupitos = doc.chupitos;
+    // const tileList = []
+    // chupitos.forEach(obj => {
+    //   tileList.push(obj.tile)
+    // });
+
+    // if (tileList.includes(playerDestiny.id)){
+    //   currentUserInfoMov.chupito = true;
+    //   console.log("aqui hay chupito");
+    //   const chupito = chupitos.filter(chup => chup.tile == playerDestiny.id)[0];
+    //   chupitoCode = chupito.code;
+
+    //   console.log(chupitos);
+    //   currentUserInfoMov.chupitoCode = chupitoCode
+    //   chupitos = chupitos.filter(chup => chup != chupito)
+    //   doc.chupitos = chupitos;
+    //   await doc.save();
+    //   console.log(chupitos);
+    // }
+
+
+
+    
       
-      // currentUserInfoMov.chupito = true;
-      
-      console.log("Casilla con POSIBLE chupito");
-    }
+    
     
     // Si está activado para grabar un nuevo camino:
     if (recordingNewPath) {
@@ -138,10 +156,16 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
       console.log("has ganado");
       currentUserInfoMov.canMove = false;
       currentUserInfoMov.isWin = true;
-      if (recordingNewPath) CreateNewPath(newPath, chupitosPath)
+      const bottle = await Bottles.findById(BOTTLEID);
+      currentUserInfoMov.winCode = bottle.codeToWin;     
+      if (recordingNewPath) CreateNewPath(newPath, chupitosPath);
       if (!recordingNewPath) TakeBottle();
+      console.log("Todo actualizado");
       return;
+         
     }
+
+    console.log("preparando");
   }
 });
 
