@@ -3,14 +3,13 @@ const { openingTime, closingTime } = require("../game-config.js")
 const miApp = require("../app");
 const { BOTTLEID, startPos, recordingNewPath } = require("../game-config")
 
-
 // Quitar la botella para cerrar la Isla a cierta hora
 const CloseIsland = async (infoMov) => {
   const close = closingTime;
   const open = openingTime;
   let timeNow = new Date().getUTCHours();
   if (timeNow >= close && timeNow <= open) {
-    await Bottles.updateOne({ isBottle: true }, { isBottle: false })
+    await TakeBottle();
     return infoMov.playTime = false;
   }
 }
@@ -18,14 +17,14 @@ const CloseIsland = async (infoMov) => {
 // Cerrar la isla si no hay botella y nadie ha ganado
 async function CheckPlayTime(userInfoMov){
  
-  let noBottle = await Bottles.findOne({ isBottle : false})
+  let bottle = await Bottles.findById(BOTTLEID)
   let anyWin;
-  if (noBottle){
+  if (!bottle.isBottle){
     miApp.allGames.forEach(element => {
       if (element.isWin) anyWin = true;
     });
   }
-  if (noBottle && !anyWin) userInfoMov.playTime = false;
+  if (!bottle.isBottle && !anyWin) userInfoMov.playTime = false;
 }
 
 // Crear códigos aleatorios
@@ -70,7 +69,7 @@ function Die(currentUserInfoMov, initialPos){
 }
 
 // Coger la botella
-const TakeBottle = async () => await Bottles.updateOne({ isBottle: true }, { isBottle: false });
+const TakeBottle = async () => await Bottles.updateOne({ _id : BOTTLEID}, { isBottle: false });
 
 // Set death tiles y chupitos
 const setDeathTiles = async (grid) =>{

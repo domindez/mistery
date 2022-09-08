@@ -35,7 +35,11 @@ routerApi.post("/onload", async (req, res) => {
       res.send(userInfoMov);
     } else {
       const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.userID)[0];
-      if (await Bottles.findOne({ isBottle: true })) currentUserInfoMov.playTime = true;
+      const bottle = await Bottles.findById(BOTTLEID)
+      if (bottle.isBottle) {
+        currentUserInfoMov.playTime = true;
+        console.log("ok bro");
+      }
       res.send(currentUserInfoMov);
     }
   } catch (error) {
@@ -49,7 +53,6 @@ routerApi.post("/clicked", async (req, res) => {
     await miApp.manejarClick(req.body, grid);
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
     res.send(currentUserInfoMov);
-    console.log("currentUserInfoMov Sent to front", currentUserInfoMov);
     if (currentUserInfoMov.chupito) currentUserInfoMov.chupito = false
     if (currentUserInfoMov.chupitoCode != null) currentUserInfoMov.chupitoCode = null
     if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]

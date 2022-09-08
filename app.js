@@ -37,7 +37,7 @@ app.listen(PORT, () => {
 const infoMov = {
   Id: null,
   playTime: true,
-  lives: 0,
+  lives: 20,
   firstClickValid: false,
   playerMoved: false,
   startPos: initialPos,
@@ -115,10 +115,6 @@ async function manejarClick(tileClickedAndId, grid){
     currentUserInfoMov.newPos = grid.filter(t => t.id == playerDestiny.id)[0];
     currentUserInfoMov.playerMoved = true;
     currentUserInfoMov.trail.push(currentUserInfoMov.newPos);
-    
-    console.log("moviendo");
-
-
     const doc = await Bottles.findById(BOTTLEID);
     let chupitos = doc.chupitos;
     const tileList = []
@@ -157,8 +153,6 @@ async function manejarClick(tileClickedAndId, grid){
       console.log("Todo actualizado");
       return;         
     }
-
-    console.log("preparando");
   }
 };
 
