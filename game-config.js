@@ -2,18 +2,22 @@
     /*-------------------------------------------------------#
     | |                PARA RECONFIGURAR:                    |
     | |                                                      |
-    | |  1. Poner la Posición Inicial y el tesoro.           |
-    | |  2. Poner el Recording Path en true                  |
-    | |  2. Hacer el camino, pinchar doble para chupito      |
-    | |  4. Poner el Recording Path en false                 |
-    | |  5. Poner el isBottle en MongoDB en true             |
+    | |  1. Poner el isBottle en MongoDB en true             |
+    | |  2. Poner la Posición Inicial y el tesoro.           |
+    | |  3. Poner el Recording Path en true                  |
+    | |  4. Hacer el camino, pinchar doble para chupito      |
+    | |  5. Poner el Recording Path en false                 |
+    | |  6. REINICIAR EL SERVIDOR                            |
     | |                                                      |             
     | /------------------------------------------------------|
     /------------------------------------------------------*/
 
-    // test 631a0547dafbb5edf68889f6   // Buena 6312254de399891863306867
 
-const BOTTLEID = "6312254de399891863306867"
+    
+const test = "631a0547dafbb5edf68889f6"
+const oficial = "6312254de399891863306867"
+
+const BOTTLEID = oficial
 
 let recordingNewPath = false;
 let startPos = "t11";
