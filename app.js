@@ -64,8 +64,7 @@ const movementsEmitter = new EventEmitter();
 const allGames = []
 
 // Lo que pasa cuando se llama el evento
-movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
-
+async function manejarClick(tileClickedAndId, grid){
   const currentUserInfoMov = allGames.filter(x => x.Id == tileClickedAndId.id)[0];
   const playerDestiny = grid.filter(t => t.id == tileClickedAndId.tileClicked)[0];
   const treasureTile = grid.filter(t => t.treasue == true)[0];
@@ -87,6 +86,7 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
   if (anyWin && winnerGame != tileClickedAndId.id) {
     currentUserInfoMov.anyOtherWin = true;
     currentUserInfoMov.canMove = false;
+    
   }
 
   // Si no se cumplen (que el player esté vivo + la casilla esté al lado) no hace nada:
@@ -119,33 +119,27 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
     console.log("moviendo");
 
 
-    // const doc = await Bottles.findById(BOTTLEID);
-    // let chupitos = doc.chupitos;
-    // const tileList = []
-    // chupitos.forEach(obj => {
-    //   tileList.push(obj.tile)
-    // });
+    const doc = await Bottles.findById(BOTTLEID);
+    let chupitos = doc.chupitos;
+    const tileList = []
+    chupitos.forEach(obj => {
+      tileList.push(obj.tile)
+    });
 
-    // if (tileList.includes(playerDestiny.id)){
-    //   currentUserInfoMov.chupito = true;
-    //   console.log("aqui hay chupito");
-    //   const chupito = chupitos.filter(chup => chup.tile == playerDestiny.id)[0];
-    //   chupitoCode = chupito.code;
+    if (tileList.includes(playerDestiny.id)){
+      currentUserInfoMov.chupito = true;
+      console.log("aqui hay chupito");
+      const chupito = chupitos.filter(chup => chup.tile == playerDestiny.id)[0];
+      chupitoCode = chupito.code;
 
-    //   console.log(chupitos);
-    //   currentUserInfoMov.chupitoCode = chupitoCode
-    //   chupitos = chupitos.filter(chup => chup != chupito)
-    //   doc.chupitos = chupitos;
-    //   await doc.save();
-    //   console.log(chupitos);
-    // }
+      console.log(chupitos);
+      currentUserInfoMov.chupitoCode = chupitoCode
+      // chupitos = chupitos.filter(chup => chup != chupito)
+      // doc.chupitos = chupitos;
+      // await doc.save();
+      // console.log(chupitos);
+    }
 
-
-
-    
-      
-    
-    
     // Si está activado para grabar un nuevo camino:
     if (recordingNewPath) {
       if (!newPath.includes(currentUserInfoMov.newPos.id)) newPath.push(currentUserInfoMov.newPos.id);
@@ -161,17 +155,16 @@ movementsEmitter.on("playerWantToMove", async (tileClickedAndId, grid) => {
       if (recordingNewPath) CreateNewPath(newPath, chupitosPath);
       if (!recordingNewPath) TakeBottle();
       console.log("Todo actualizado");
-      return;
-         
+      return;         
     }
 
     console.log("preparando");
   }
-});
+};
 
 module.exports.infoMov = infoMov;
 module.exports.allGames = allGames;
-module.exports.movementsEmitter = movementsEmitter;
+module.exports.manejarClick = manejarClick;
 
 
 

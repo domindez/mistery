@@ -389,10 +389,10 @@ function manejarRespuesta(infoMov, tileClicked) {
         victoryBtn.classList.add("active");
       }, 1000)
     }
-    // if (infoMov.chupito) {
-    //   chupitoPopup.classList.add("active");
-    //   console.log("ha entrado");
-    // }
+    if (infoMov.chupito) {
+      chupitoPopup.classList.add("active");
+      console.log("ha entrado");
+    }
     
     return
   }

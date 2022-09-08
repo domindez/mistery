@@ -46,11 +46,10 @@ routerApi.post("/onload", async (req, res) => {
 // Cuando clicas en un botón del juego
 routerApi.post("/clicked", async (req, res) => {
   try {
-    miApp.movementsEmitter.emit("playerWantToMove", req.body, grid);
+    await miApp.manejarClick(req.body, grid);
     const currentUserInfoMov = miApp.allGames.filter(x => x.Id == req.body.id)[0];
     res.send(currentUserInfoMov);
-    console.log("Enviado al Front");
-
+    console.log("currentUserInfoMov Sent to front", currentUserInfoMov);
     if (currentUserInfoMov.chupito) currentUserInfoMov.chupito = false
     if (currentUserInfoMov.chupitoCode != null) currentUserInfoMov.chupitoCode = null
     if (currentUserInfoMov.enterDeath) currentUserInfoMov.trail = [initialPos]
