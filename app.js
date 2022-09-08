@@ -37,7 +37,7 @@ app.listen(PORT, () => {
 const infoMov = {
   Id: null,
   playTime: true,
-  lives: 20,
+  lives: 0,
   firstClickValid: false,
   playerMoved: false,
   startPos: initialPos,
