@@ -14,6 +14,8 @@ const playTimeOff = document.getElementById("play-time-off")
 const help = document.getElementById("help");
 // Chupito
 const chupitoPopup = document.getElementById("popup-chupito");
+const chupitoCode = document.getElementById("chupito-code");
+const chupitoClose = document.getElementById("chupito-close");
 // Codigo
 const popupBtn = document.getElementById("popUp-btn");
 const helpPopup = document.getElementById("popup-overlay");
@@ -68,6 +70,13 @@ if (winnerTable) {
   winnerTable.addEventListener("click", e => {
     if (e.target !== winnerTable && e.target !== closewinnerTable) return;
     winnerTable.classList.remove("active");
+  })
+}
+
+if (chupitoPopup) {
+  chupitoPopup.addEventListener("click", e => {
+    if (e.target !== chupitoPopup && e.target !== chupitoClose) return;
+    chupitoPopup.classList.remove("active");
   })
 }
 
@@ -185,8 +194,8 @@ window.onload = function () {
   let userID = localStorage.getItem("userID");
   const JsonUserID = JSON.stringify({ userID })
 
-  // fetch("/api/onload", {
-    fetch("http://localhost:3000/api/onload", {
+  fetch("/api/onload", {
+    // fetch("http://localhost:3000/api/onload", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -215,8 +224,8 @@ codeForm.addEventListener("submit", e => {
   let code = document.getElementById("code-input").value;
   const JSONcode = JSON.stringify({ code, userID });
 
-  // fetch("/api/newcode", {
-    fetch("http://localhost:3000/api/newcode", {
+  fetch("/api/newcode", {
+    // fetch("http://localhost:3000/api/newcode", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -253,8 +262,8 @@ board.forEach(element => {
     tileClickedAndId.id = localStorage.getItem("userID");
     let jsonTileClickedAndId = JSON.stringify(tileClickedAndId)
 
-    // fetch("/api/clicked", {
-      fetch("http://localhost:3000/api/clicked", {
+    fetch("/api/clicked", {
+      // fetch("http://localhost:3000/api/clicked", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -277,8 +286,8 @@ winnerForm.addEventListener("submit", e => {
   let winnerName = document.getElementById("winner-name").value;
   const JSONcode = JSON.stringify({ nombre: winnerName, userID });
 
-  // fetch("/api/newwinner", {
-    fetch("http://localhost:3000/api/newwinner", {
+  fetch("/api/newwinner", {
+    // fetch("http://localhost:3000/api/newwinner", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -296,8 +305,8 @@ winnerForm.addEventListener("submit", e => {
 // Abrir y mostrar lista de buscadores
 tableBtn.addEventListener("click", () => {
 
-  // fetch("/api/winnertable", {
-    fetch("http://localhost:3000/api/winnertable", {
+  fetch("/api/winnertable", {
+    // fetch("http://localhost:3000/api/winnertable", {
     method: "GET"
   })
     .then(res => res.json())
@@ -391,6 +400,7 @@ function manejarRespuesta(infoMov, tileClicked) {
     }
     if (infoMov.chupito) {
       chupitoPopup.classList.add("active");
+      chupitoCode.innerHTML = infoMov.chupitoCode;
       console.log("ha entrado");
     }
     

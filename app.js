@@ -37,7 +37,7 @@ app.listen(PORT, () => {
 const infoMov = {
   Id: null,
   playTime: true,
-  lives: 20,
+  lives: 0,
   firstClickValid: false,
   playerMoved: false,
   startPos: initialPos,
@@ -134,10 +134,10 @@ async function manejarClick(tileClickedAndId, grid){
 
       console.log(chupitos);
       currentUserInfoMov.chupitoCode = chupitoCode
-      // chupitos = chupitos.filter(chup => chup != chupito)
-      // doc.chupitos = chupitos;
-      // await doc.save();
-      // console.log(chupitos);
+      chupitos = chupitos.filter(chup => chup != chupito)
+      doc.chupitos = chupitos;
+      await doc.save();
+      console.log(chupitos);
     }
 
     // Si está activado para grabar un nuevo camino:
