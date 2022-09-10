@@ -37,7 +37,7 @@ app.listen(PORT, () => {
 const infoMov = {
   Id: null,
   playTime: true,
-  lives: 0,
+  lives: 1,
   firstClickValid: false,
   playerMoved: false,
   startPos: initialPos,
@@ -122,7 +122,7 @@ async function manejarClick(tileClickedAndId, grid){
       tileList.push(obj.tile)
     });
 
-    if (tileList.includes(playerDestiny.id)){
+    if (tileList.includes(playerDestiny.id) && !recordingNewPath){
       currentUserInfoMov.chupito = true;
       console.log("aqui hay chupito");
       const chupito = chupitos.filter(chup => chup.tile == playerDestiny.id)[0];

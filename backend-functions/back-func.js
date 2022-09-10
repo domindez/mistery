@@ -30,7 +30,7 @@ async function CheckPlayTime(userInfoMov){
 // Crear códigos aleatorios
 function CreateRandomCode(length) {
   var result           = '';
-  var characters       = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  var characters       = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   var charactersLength = characters.length;
   for ( var i = 0; i < length; i++ ) {
     result += characters.charAt(Math.floor(Math.random() * 
@@ -43,9 +43,10 @@ charactersLength));
 async function CreateNewPath(newPath, chupitosPath){
   const doc = await Bottles.findById(BOTTLEID)
   doc.path = newPath;
-  doc.path.push(startPos)
+  doc.path.push(startPos);
+  doc.codeToWin = CreateRandomCode(6);
   console.log('Nuevo Path :>> ', doc.path);
-  chupitosConCodigo = []
+  chupitosConCodigo = [];
   chupitosPath.forEach(tileId => {
     chupitosConCodigo.push({
       tile : tileId,
@@ -55,6 +56,7 @@ async function CreateNewPath(newPath, chupitosPath){
   doc.chupitos = chupitosConCodigo;
   doc.save()
   console.log('Chupitos en :>> ', doc.chupitos);
+  console.log('Codigo de botella :>> ', doc.codeToWin);
 }
 
 // Morir

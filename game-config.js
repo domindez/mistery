@@ -19,9 +19,9 @@ const oficial = "6312254de399891863306867"
 
 const BOTTLEID = oficial
 
-let recordingNewPath = false;
+let recordingNewPath = true;
 let startPos = "t11";
-let treasurePos ="t95";
+let treasurePos ="t97";
 
 
 const closingTime = 01
